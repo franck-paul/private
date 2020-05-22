@@ -1,0 +1,25 @@
+v1.9 (22/05/2020) Franck :
+reprise du look du formulaire de saisie du mot de passe
+ajout du jeu de template dotty
+
+v1.8 (23/02/2015) Osku :
+petit correction de la gestion de la barre d'édition
+le mot de passe est maintenant crypté
+
+
+v1.7.3 (07/02/2015) Pierre Van Glabeke :
+ajout hors ligne widget + affichage
+ajout barre édition dans la page index
+modification private.html
+
+v1.7.2 (20/07/2014) Pierre Van Glabeke :
+correction ticket http://lab.dotclear.org/ticket/736
+
+v1.7.1 (18/02/2014) Pierre Van Glabeke :
+fin de ligne unix
+modif date dans bloc licence
+ajout options (content_only, class) dans le widget
+modif code pour la description dans le widget
+modif affichage de la page index (Plugins->Blog)
+modif affichage helpbox
+mise en compatibilité dc2.6

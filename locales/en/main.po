@@ -1,0 +1,111 @@
+# SOME DESCRIPTIVE TITLE.
+# This file is put in the public domain.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Dotclear 2 private module\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-05-22 08:49+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Access to blog"
+msgstr ""
+
+msgid "Restricted area"
+msgstr ""
+
+msgid "Private mode"
+msgstr ""
+
+msgid "<h2>Private blog</h2><p class=\"message\">You need the password to view this blog.</p>"
+msgstr ""
+
+msgid "PrivateMode"
+msgstr ""
+
+msgid "Blog logout"
+msgstr ""
+
+msgid "Title:"
+msgstr ""
+
+msgid "Button:"
+msgstr ""
+
+msgid "Disconnect"
+msgstr ""
+
+msgid "Enable automatic connection"
+msgstr ""
+
+msgid "Wrong password"
+msgstr ""
+
+msgid "You are now disconnected."
+msgstr ""
+
+msgid "Non protected"
+msgstr ""
+
+msgid "Protected"
+msgstr ""
+
+msgid "Passwords don't match"
+msgstr ""
+
+msgid "No password set."
+msgstr ""
+
+msgid "Feeds have changed, new are displayed below."
+msgstr ""
+
+#, php-format
+msgid "Password strength: %s"
+msgstr ""
+
+msgid "very weak"
+msgstr ""
+
+msgid "weak"
+msgstr ""
+
+msgid "mediocre"
+msgstr ""
+
+msgid "strong"
+msgstr ""
+
+msgid "very strong"
+msgstr ""
+
+msgid "Enable private mode"
+msgstr ""
+
+msgid "Change blog password"
+msgstr ""
+
+msgid "New password:"
+msgstr ""
+
+msgid "Confirm password:"
+msgstr ""
+
+msgid "Message:"
+msgstr ""
+
+msgid "Propose automatic connection to visitors"
+msgstr ""
+
+msgid "Redirect URL after disconnection:"
+msgstr ""
+
+msgid "Save"
+msgstr ""

@@ -1,0 +1,110 @@
+# Language: Français
+# Module: private - 1.8.1
+# Date: 2015-02-24 09:37:17
+# Translated with translater 2013.05.11
+msgid ""
+msgstr ""
+"Project-Id-Version: private 1.8.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-05-22 08:49+0200\n"
+"PO-Revision-Date: 2015-02-24T09:37:17+00:00\n"
+"Last-Translator: Greg\n"
+"Language-Team: \n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Access to blog"
+msgstr "Accès au blog"
+
+msgid "Restricted area"
+msgstr "Zone d'accès restreint"
+
+msgid "Private mode"
+msgstr "Mode privé"
+
+msgid "<h2>Private blog</h2><p class=\"message\">You need the password to view this blog.</p>"
+msgstr "<h2>Blog privé</h2><p class=\"message\">Vous avez besoin du mot de passe pour visualiser le blog.</p>"
+
+msgid "PrivateMode"
+msgstr "Mode privé"
+
+msgid "Blog logout"
+msgstr "Déconnexion du blog"
+
+msgid "Title:"
+msgstr "Titre :"
+
+msgid "Button:"
+msgstr "Bouton :"
+
+msgid "Disconnect"
+msgstr "Se déconnecter"
+
+msgid "Enable automatic connection"
+msgstr "Activer la connexion automatique"
+
+msgid "Wrong password"
+msgstr "Mot de passe incorrect"
+
+msgid "You are now disconnected."
+msgstr "Vous êtes maintenant déconnecté(e)."
+
+msgid "Non protected"
+msgstr "Non protégé"
+
+msgid "Protected"
+msgstr "Protégé"
+
+msgid "Passwords don't match"
+msgstr "Les mot de passe ne correspondent pas"
+
+msgid "No password set."
+msgstr "Aucun mot de passe défini."
+
+msgid "Feeds have changed, new are displayed below."
+msgstr "Les fils de syndication ont changés, les nouveaux sont affichés ci-dessous."
+
+#, php-format
+msgid "Password strength: %s"
+msgstr "Force du mot de passe : %s"
+
+msgid "very weak"
+msgstr "très faible"
+
+msgid "weak"
+msgstr "faible"
+
+msgid "mediocre"
+msgstr "médiocre"
+
+msgid "strong"
+msgstr "fort"
+
+msgid "very strong"
+msgstr "très fort"
+
+msgid "Enable private mode"
+msgstr "Activer le mode privé"
+
+msgid "Change blog password"
+msgstr "Changer le mot de passe du blog"
+
+msgid "New password:"
+msgstr "Nouveau mot de passe :"
+
+msgid "Confirm password:"
+msgstr "Confirmer le mot de passe :"
+
+msgid "Message:"
+msgstr "Message :"
+
+msgid "Propose automatic connection to visitors"
+msgstr "Proposer la connexion automatique aux visiteurs"
+
+msgid "Redirect URL after disconnection:"
+msgstr "URL de redirection après la déconnexion :"
+
+msgid "Save"
+msgstr "Enregistrer"
