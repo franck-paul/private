@@ -23,6 +23,11 @@ class widgetsPrivate
                 return;
             }
 
+            if (($w->homeonly == 1 && !$core->url->isHome($core->url->type)) ||
+                ($w->homeonly == 2 && $core->url->isHome($core->url->type))) {
+                return;
+            }
+
             $res =
             ($w->title ? $w->renderTitle(html::escapeHTML($w->title)) : '') .
             '<p>' . $w->text . '</p>' .

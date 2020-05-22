@@ -20,9 +20,10 @@ class privateWidgets
     public static function initWidgets($w)
     {
         $w->create('privateblog', __('PrivateMode'), array('widgetsPrivate', 'widgetLogout'), null, __('Blog logout'))
-            ->setting('title', __('Title:'), __('Blog logout'))
+            ->addTitle(__('Blog logout'))
             ->setting('text', __('Text:'), '', 'textarea')
             ->setting('label', __('Button:'), __('Disconnect'))
+            ->addHomeOnly()
             ->addContentOnly()
             ->addClass()
             ->addOffline();

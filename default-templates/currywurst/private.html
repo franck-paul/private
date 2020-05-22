@@ -53,7 +53,7 @@
 
   h2 {
     color: var(--color-title);
-    margin: 0;
+    margin: 0 0 1em 0;
   }
 
   svg.icon {
@@ -102,7 +102,7 @@
       </tpl:SysIfFormError>
       {{tpl:SysBehavior behavior="publicPrivateFormAfterContent"}}
       <p>
-        <label>{{tpl:lang Password:}}
+        <label for="private_pass">{{tpl:lang Password:}}
           <input type="password" name="private_pass" id="private_pass" value="" />
         </label>
         <input type="submit" value="ok" title="{{tpl:lang Access to blog}}" />
