@@ -19,14 +19,12 @@ class privateWidgets
 {
     public static function initWidgets($w)
     {
-        $w->create('privateblog', __('PrivateMode'), array('widgetsPrivate', 'widgetLogout'),
-            null,
-            __('Blog logout'));
-        $w->privateblog->setting('title', __('Title:'), __('Blog logout'));
-        $w->privateblog->setting('text', __('Text:'), '', 'textarea');
-        $w->privateblog->setting('label', __('Button:'), __('Disconnect'));
-        $w->privateblog->setting('content_only', __('Content only'), 0, 'check');
-        $w->privateblog->setting('class', __('CSS class:'), '');
-        $w->privateblog->setting('offline', __('Offline'), 0, 'check');
+        $w->create('privateblog', __('PrivateMode'), array('widgetsPrivate', 'widgetLogout'), null, __('Blog logout'))
+            ->setting('title', __('Title:'), __('Blog logout'))
+            ->setting('text', __('Text:'), '', 'textarea')
+            ->setting('label', __('Button:'), __('Disconnect'))
+            ->addContentOnly()
+            ->addClass()
+            ->addOffline();
     }
 }
