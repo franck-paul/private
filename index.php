@@ -39,6 +39,10 @@ if ($post_editor) {
 }
 
 if (!empty($_POST['saveconfig'])) {
+    if (!empty($_POST['private_flag']) && empty($_POST['blog_private_pwd']) && empty($s->blog_private_pwd)) {
+        dcPage::addErrorNotice(__('No password set.'));
+        http::redirect($p_url);
+    }
     try {
         $private_flag         = (empty($_POST['private_flag'])) ? false : true;
         $private_conauto_flag = (empty($_POST['private_conauto_flag'])) ? false : true;
