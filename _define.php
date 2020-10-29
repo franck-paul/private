@@ -17,7 +17,7 @@ $this->registerModule(
     "PrivateMode",                       // Name
     "Protect your blog with a password", // Description
     "Osku and contributors",             // Author
-    '1.10',                              // Version
+    '1.10.1',                            // Version
     [
         'requires'    => [['core', '2.16']],                                 // Dependencies
         'permissions' => 'admin',                                            // Permissions
