@@ -10,8 +10,9 @@
  * @copyright Osku
  * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
-
-if (!defined('DC_CONTEXT_ADMIN')) {exit;}
+if (!defined('DC_CONTEXT_ADMIN')) {
+    exit;
+}
 
 // Getting current settings
 $page_title           = __('Private mode');
@@ -34,7 +35,7 @@ if ($post_editor) {
         'adminPostEditor',
         $post_editor['xhtml'],
         'private_page_message',
-        array('#private_page_message')
+        ['#private_page_message']
     );
 }
 
@@ -43,6 +44,7 @@ if (!empty($_POST['saveconfig'])) {
         dcPage::addErrorNotice(__('No password set.'));
         http::redirect($p_url);
     }
+
     try {
         $private_flag         = (empty($_POST['private_flag'])) ? false : true;
         $private_conauto_flag = (empty($_POST['private_conauto_flag'])) ? false : true;
@@ -78,8 +80,7 @@ if ($s->blog_private_pwd === null) {
 }
 
 if ($s->private_flag === true) {
-    $new_feeds =
-    '<h3 class="vertical-separator pretty-title">' . __('Syndication') . '</h3>
+    $new_feeds = '<h3 class="vertical-separator pretty-title">' . __('Syndication') . '</h3>
     <p class="warning">' . __('Feeds have changed, new are displayed below.') . '</p>
     <ul class="nice">
     <li class="feed"><a href="' . $feed . '">' . __('Entries feed') . '</a></li>
@@ -95,28 +96,23 @@ if ($s->private_flag === true) {
 $admin_post_behavior .
 dcPage::jsLoad('js/jquery/jquery-ui.custom.js') .
 dcPage::jsLoad('js/jquery/jquery.ui.touch-punch.js') .
-dcPage::jsLoad('js/jquery/jquery.pwstrength.js') .
-'<script type="text/javascript">' . "\n" .
-"//<![CDATA[\n" .
-"\$(function() {\n" .
-"   \$('#blog_private_pwd').pwstrength({texts: ['" .
-sprintf(__('Password strength: %s'), __('very weak')) . "', '" .
-sprintf(__('Password strength: %s'), __('weak')) . "', '" .
-sprintf(__('Password strength: %s'), __('mediocre')) . "', '" .
-sprintf(__('Password strength: %s'), __('strong')) . "', '" .
-sprintf(__('Password strength: %s'), __('very strong')) . "']});\n" .
-    "});" .
-    "\n//]]>\n" .
-    "</script>\n"; ?>
+dcPage::jsJson('pwstrength', [
+    'min' => sprintf(__('Password strength: %s'), __('weak')),
+    'avg' => sprintf(__('Password strength: %s'), __('medium')),
+    'max' => sprintf(__('Password strength: %s'), __('strong'))
+]) .
+dcPage::jsLoad('js/pwstrength.js') .
+dcPage::jsLoad(urldecode(dcPage::getPF('private/js/admin.js')), $core->getVersion('private'));
+?>
 </head>
 <body>
 <?php
 
 echo dcPage::breadcrumb(
-    array(
+    [
         html::escapeHTML($core->blog->name)                                 => '',
         '<span class="page-title">' . $page_title . '</span> ' . $img_title => ''
-    )) .
+    ]) .
 dcPage::notices();
 
 echo
@@ -130,14 +126,8 @@ __('Enable private mode') . '</label>
 
 echo
 '<h4 class="vertical-separator pretty-title">' . __('Change blog password') . '</h4>' .
-'<div class="pw-table">' .
-'<p class="pw-cell"><label for="new_pwd">' . __('New password:') . '</label>' .
-form::password('blog_private_pwd', 20, 255, '', '', '', false, ' data-indicator="pwindicator" ') . '</p>' .
-'<div id="pwindicator">' .
-'    <div class="bar"></div>' .
-'    <p class="label no-margin"></p>' .
-'</div>' .
-'</div>' .
+'<p><label for="new_pwd">' . __('New password:') . '</label>' .
+form::password('blog_private_pwd', 20, 255, '', 'pw-strength') . '</p>' .
 '<p><label for="blog_private_pwd_c">' . __('Confirm password:') . '</label> ' .
 form::password('blog_private_pwd_c', 20, 255) .
 '</p>
@@ -154,7 +144,7 @@ __('Redirect URL after disconnection:') . '</label> ' .
 form::field('redirect_url', 50, 255, html::escapeHTML($redirect_url)) .
 '</p>' .
 $new_feeds .
-'<p>' . form::hidden(array('p'), 'private') .
+'<p>' . form::hidden(['p'], 'private') .
 $core->formNonce() .
 '<input type="submit" name="saveconfig" value="' . __('Save') . '" />
 </p>

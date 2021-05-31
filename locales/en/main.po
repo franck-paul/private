@@ -67,25 +67,6 @@ msgstr ""
 msgid "Feeds have changed, new are displayed below."
 msgstr ""
 
-#, php-format
-msgid "Password strength: %s"
-msgstr ""
-
-msgid "very weak"
-msgstr ""
-
-msgid "weak"
-msgstr ""
-
-msgid "mediocre"
-msgstr ""
-
-msgid "strong"
-msgstr ""
-
-msgid "very strong"
-msgstr ""
-
 msgid "Enable private mode"
 msgstr ""
 

@@ -66,25 +66,6 @@ msgstr "Aucun mot de passe défini."
 msgid "Feeds have changed, new are displayed below."
 msgstr "Les fils de syndication ont changés, les nouveaux sont affichés ci-dessous."
 
-#, php-format
-msgid "Password strength: %s"
-msgstr "Force du mot de passe : %s"
-
-msgid "very weak"
-msgstr "très faible"
-
-msgid "weak"
-msgstr "faible"
-
-msgid "mediocre"
-msgstr "médiocre"
-
-msgid "strong"
-msgstr "fort"
-
-msgid "very strong"
-msgstr "très fort"
-
 msgid "Enable private mode"
 msgstr "Activer le mode privé"
 
