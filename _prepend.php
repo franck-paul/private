@@ -10,8 +10,9 @@
  * @copyright Osku
  * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
-
-if (!defined('DC_RC_PATH')) {return;}
+if (!defined('DC_RC_PATH')) {
+    return;
+}
 
 $GLOBALS['__autoload']['behaviorsPrivate'] = dirname(__FILE__) . '/inc/class.private.behaviors.php';
 $GLOBALS['__autoload']['tplPrivate']       = dirname(__FILE__) . '/inc/class.private.tpl.php';
@@ -23,7 +24,7 @@ require dirname(__FILE__) . '/_widgets.php';
 $core->blog->settings->addNamespace('private');
 
 #Rewrite Feeds with new URL and representation
-$feeds_url = new ArrayObject(array('feed', 'tag_feed'));
+$feeds_url = new ArrayObject(['feed', 'tag_feed']);
 $core->callBehavior('initFeedsPrivateMode', $feeds_url);
 
 if ($core->blog->settings->private->private_flag) {
@@ -44,10 +45,9 @@ if ($core->blog->settings->private->private_flag) {
     $core->url->register('pubfeed',
         'feed',
         '^feed/(.+)$',
-        array('urlPrivate', 'publicFeed')
+        ['urlPrivate', 'publicFeed']
     );
 
     #Trick..
-    $core->url->register('xslt', 'feed/rss2/xslt', '^feed/rss2/xslt$', array('urlPrivate', 'feedXslt'));
-
+    $core->url->register('xslt', 'feed/rss2/xslt', '^feed/rss2/xslt$', ['urlPrivate', 'feedXslt']);
 }

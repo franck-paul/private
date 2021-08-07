@@ -10,8 +10,9 @@
  * @copyright Osku
  * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
-
-if (!defined('DC_CONTEXT_ADMIN')) {return;}
+if (!defined('DC_CONTEXT_ADMIN')) {
+    return;
+}
 
 $icon_img = $core->blog->settings->private->private_flag ? 'index.php?pf=private/icon-alt.png' : 'index.php?pf=private/icon.png';
 

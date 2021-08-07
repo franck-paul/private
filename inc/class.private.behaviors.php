@@ -10,8 +10,9 @@
  * @copyright Osku
  * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
-
-if (!defined('DC_RC_PATH')) {return;}
+if (!defined('DC_RC_PATH')) {
+    return;
+}
 
 class behaviorsPrivate
 {
@@ -23,7 +24,7 @@ class behaviorsPrivate
     public static function publicPrivateFormAfterContent($core)
     {
         echo '<p><label class="classic">' .
-        form::checkbox(array('pass_remember'), 1) . ' ' .
+        form::checkbox(['pass_remember'], 1) . ' ' .
         __('Enable automatic connection') . '</label></p>';
     }
 }

@@ -10,8 +10,9 @@
  * @copyright Osku
  * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
-
-if (!defined('DC_RC_PATH')) {return;}
+if (!defined('DC_RC_PATH')) {
+    return;
+}
 
 class urlPrivate extends dcUrlHandlers
 {
@@ -26,7 +27,7 @@ class urlPrivate extends dcUrlHandlers
         global $core, $_ctx;
 
         $type   = null;
-        $params = array();
+        $params = [];
         $mime   = 'application/xml';
 
         if (preg_match('#^(atom|rss2)$#', $args, $m)) {
@@ -44,14 +45,11 @@ class urlPrivate extends dcUrlHandlers
         header('X-Robots-Tag: ' . context::robotsPolicy($core->blog->settings->system->robots_policy, ''));
         $core->tpl->setPath($core->tpl->getPath(), dirname(__FILE__) . '/default-templates');
         self::serveDocument($tpl, $mime);
-
-        return;
     }
 
     public static function callbackfoo($args)
     {
         #Woohoo :)
-        return;
     }
 
     public static function privateHandler($args)
@@ -61,9 +59,9 @@ class urlPrivate extends dcUrlHandlers
         #New temporary urlHandlers
         $urlp       = new urlHandler();
         $urlp->mode = $core->url->mode;
-        $urlp->registerDefault(array('urlPrivate', 'callbackfoo'));
+        $urlp->registerDefault(['urlPrivate', 'callbackfoo']);
         foreach ($core->url->getTypes() as $k => $v) {
-            $urlp->register($k, $v['url'], $v['representation'], array('urlPrivate', 'callbackfoo'));
+            $urlp->register($k, $v['url'], $v['representation'], ['urlPrivate', 'callbackfoo']);
         }
 
         #Find type
@@ -84,11 +82,11 @@ class urlPrivate extends dcUrlHandlers
 
         #Define allowed url->type
         $allowed_types = new ArrayObject(
-            array(
+            [
                 'feed', 'xslt', 'tag_feed', 'pubfeed', 'spamfeed',
                 'hamfeed', 'trackback', 'preview', 'pagespreview', 'contactme',
                 'rsd', 'xmlrpc'
-            )
+            ]
         );
         $core->callBehavior('initPrivateMode', $allowed_types);
 
@@ -108,59 +106,59 @@ class urlPrivate extends dcUrlHandlers
 
         if (in_array($type, (array) $allowed_types)) {
             return;
+        }
+        #Add cookie test (automatic login)
+        $cookiepass = 'dc_privateblog_cookie_' . $core->blog->id;
+
+        if (!empty($_COOKIE[$cookiepass])) {
+            $cookiepassvalue = (($_COOKIE[$cookiepass]) == $password);
         } else {
-            #Add cookie test (automatic login)
-            $cookiepass = "dc_privateblog_cookie_" . $core->blog->id;
+            $cookiepassvalue = false;
+        }
 
-            if (!empty($_COOKIE[$cookiepass])) {
-                $cookiepassvalue = (($_COOKIE[$cookiepass]) == $password);
-            } else {
-                $cookiepassvalue = false;
+        #Let's rumble session, cookies & conf :)
+        if (!isset($_SESSION['sess_blog_private']) || $_SESSION['sess_blog_private'] == '') {
+            if ($cookiepassvalue != false) {
+                $_SESSION['sess_blog_private'] = $_COOKIE[$cookiepass];
+
+                return;
             }
+            if (!empty($_POST['private_pass'])) {
+                if (md5($_POST['private_pass']) == $password) {
+                    $_SESSION['sess_blog_private'] = md5($_POST['private_pass']);
 
-            #Let's rumble session, cookies & conf :)
-            if (!isset($_SESSION['sess_blog_private']) || $_SESSION['sess_blog_private'] == "") {
-                if ($cookiepassvalue != false) {
-                    $_SESSION['sess_blog_private'] = $_COOKIE[$cookiepass];
+                    if (!empty($_POST['pass_remember'])) {
+                        setcookie($cookiepass, md5($_POST['private_pass']), time() + 31536000, '/');
+                    }
+
                     return;
                 }
-                if (!empty($_POST['private_pass'])) {
-                    if (md5($_POST['private_pass']) == $password) {
-                        $_SESSION['sess_blog_private'] = md5($_POST['private_pass']);
-
-                        if (!empty($_POST['pass_remember'])) {
-                            setcookie($cookiepass, md5($_POST['private_pass']), time() + 31536000, '/');
-                        }
-                        return;
-                    }
-                    $_ctx->form_error = __('Wrong password');
-                }
-                $session->destroy();
-                self::serveDocument('private.html', 'text/html', false);
-                # --BEHAVIOR-- publicAfterDocument
-                $core->callBehavior('publicAfterDocument', $core);
-                exit;
-            } elseif ($_SESSION['sess_blog_private'] != $password) {
-                $session->destroy();
-                self::serveDocument('private.html', 'text/html', false);
-                # --BEHAVIOR-- publicAfterDocument
-                $core->callBehavior('publicAfterDocument', $core);
-                exit;
-            } elseif (isset($_POST['blogout'])) {
-                $session->destroy();
-                setcookie($cookiepass, 'ciao', time() - 86400, '/');
-                // Redirection ??
-                if ($core->blog->settings->private->redirect_url != '') {
-                    http::redirect($core->blog->settings->private->redirect_url);
-                } else {
-                    $_ctx->form_error = __('You are now disconnected.');
-                    self::serveDocument('private.html', 'text/html', false);
-                    # --BEHAVIOR-- publicAfterDocument
-                    $core->callBehavior('publicAfterDocument', $core);
-                    exit;
-                }
+                $_ctx->form_error = __('Wrong password');
             }
-            return;
+            $session->destroy();
+            self::serveDocument('private.html', 'text/html', false);
+            # --BEHAVIOR-- publicAfterDocument
+            $core->callBehavior('publicAfterDocument', $core);
+            exit;
+        } elseif ($_SESSION['sess_blog_private'] != $password) {
+            $session->destroy();
+            self::serveDocument('private.html', 'text/html', false);
+            # --BEHAVIOR-- publicAfterDocument
+            $core->callBehavior('publicAfterDocument', $core);
+            exit;
+        } elseif (isset($_POST['blogout'])) {
+            $session->destroy();
+            setcookie($cookiepass, 'ciao', time() - 86400, '/');
+            // Redirection ??
+            if ($core->blog->settings->private->redirect_url != '') {
+                http::redirect($core->blog->settings->private->redirect_url);
+            } else {
+                $_ctx->form_error = __('You are now disconnected.');
+                self::serveDocument('private.html', 'text/html', false);
+                # --BEHAVIOR-- publicAfterDocument
+                $core->callBehavior('publicAfterDocument', $core);
+                exit;
+            }
         }
     }
 }

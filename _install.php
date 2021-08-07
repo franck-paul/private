@@ -10,8 +10,9 @@
  * @copyright Osku
  * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
-
-if (!defined('DC_CONTEXT_ADMIN')) {exit;}
+if (!defined('DC_CONTEXT_ADMIN')) {
+    exit;
+}
 
 $new_version     = $core->plugins->moduleInfo('private', 'version');
 $current_version = $core->getVersion('private');
@@ -51,4 +52,5 @@ $s->put('redirect_url',
 );
 
 $core->setVersion('private', $new_version);
+
 return true;
