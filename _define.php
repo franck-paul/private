@@ -24,7 +24,9 @@ $this->registerModule(
         'permissions' => 'admin',                                            // Permissions
         'priority'    => 1501,                                               // Priority
         'type'        => 'plugin',                                           // Type
-        'support'     => 'https://github.com/franck-paul/private',           // Support URL
-        'details'     => 'http://plugins.dotaddict.org/dc2/details/private' // Doc URL
+
+        'details'    => 'https://open-time.net/?q=private',       // Details URL
+        'support'    => 'https://github.com/franck-paul/private', // Support URL
+        'repository' => 'https://raw.githubusercontent.com/franck-paul/private/main/dcstore.xml'
     ]
 );
