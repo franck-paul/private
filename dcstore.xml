@@ -1,8 +1,8 @@
 <modules xmlns:da="http://dotaddict.org/da/">
   <module id="private">
-    <name>Protect your blog with a password</name>
+    <name>PrivateMode</name>
     <version>1.11</version>
-    <author>Protect your blog with a password</author>
+    <author>Osku and contributors</author>
     <desc>Protect your blog with a password</desc>
     <file>https://github.com/franck-paul/private/releases/download/1.11/plugin-private-1.11.zip</file>
     <da:dcmin>2.19</da:dcmin>
