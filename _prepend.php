@@ -14,26 +14,26 @@ if (!defined('DC_RC_PATH')) {
     return;
 }
 
-$GLOBALS['__autoload']['behaviorsPrivate'] = dirname(__FILE__) . '/inc/class.private.behaviors.php';
-$GLOBALS['__autoload']['tplPrivate']       = dirname(__FILE__) . '/inc/class.private.tpl.php';
-$GLOBALS['__autoload']['widgetsPrivate']   = dirname(__FILE__) . '/inc/class.private.widgets.php';
-$GLOBALS['__autoload']['urlPrivate']       = dirname(__FILE__) . '/inc/class.private.urlhandlers.php';
+$GLOBALS['__autoload']['behaviorsPrivate'] = __DIR__ . '/inc/class.private.behaviors.php';
+$GLOBALS['__autoload']['tplPrivate']       = __DIR__ . '/inc/class.private.tpl.php';
+$GLOBALS['__autoload']['widgetsPrivate']   = __DIR__ . '/inc/class.private.widgets.php';
+$GLOBALS['__autoload']['urlPrivate']       = __DIR__ . '/inc/class.private.urlhandlers.php';
 
-require dirname(__FILE__) . '/_widgets.php';
+require __DIR__ . '/_widgets.php';
 
-$core->blog->settings->addNamespace('private');
+dcCore::app()->blog->settings->addNamespace('private');
 
 #Rewrite Feeds with new URL and representation
 $feeds_url = new ArrayObject(['feed', 'tag_feed']);
-$core->callBehavior('initFeedsPrivateMode', $feeds_url);
+dcCore::app()->callBehavior('initFeedsPrivateMode', $feeds_url);
 
-if ($core->blog->settings->private->private_flag) {
-    $privatefeed = $core->blog->settings->private->blog_private_pwd;
+if (dcCore::app()->blog->settings->private->private_flag) {
+    $privatefeed = dcCore::app()->blog->settings->private->blog_private_pwd;
 
     #Obfuscate all feeds URL
-    foreach ($core->url->getTypes() as $k => $v) {
+    foreach (dcCore::app()->url->getTypes() as $k => $v) {
         if (in_array($k, (array) $feeds_url)) {
-            $core->url->register(
+            dcCore::app()->url->register(
                 $k,
                 sprintf('%s/%s', $privatefeed, $v['url']),
                 sprintf('^%s/%s/(.+)$', $privatefeed, $v['url']),
@@ -42,12 +42,13 @@ if ($core->blog->settings->private->private_flag) {
         }
     }
 
-    $core->url->register('pubfeed',
+    dcCore::app()->url->register(
+        'pubfeed',
         'feed',
         '^feed/(.+)$',
         ['urlPrivate', 'publicFeed']
     );
 
     #Trick..
-    $core->url->register('xslt', 'feed/rss2/xslt', '^feed/rss2/xslt$', ['urlPrivate', 'feedXslt']);
+    dcCore::app()->url->register('xslt', 'feed/rss2/xslt', '^feed/rss2/xslt$', ['urlPrivate', 'feedXslt']);
 }

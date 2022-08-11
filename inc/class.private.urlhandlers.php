@@ -24,11 +24,8 @@ class urlPrivate extends dcUrlHandlers
     public static function publicFeed($args)
     {
         #Don't reinvent the wheel - take a look to dcUrlHandlers/feed
-        global $core, $_ctx;
-
-        $type   = null;
-        $params = [];
-        $mime   = 'application/xml';
+        $type = null;
+        $mime = 'application/xml';
 
         if (preg_match('#^(atom|rss2)$#', $args, $m)) {
             # Atom or RSS2 ?
@@ -42,8 +39,8 @@ class urlPrivate extends dcUrlHandlers
             $mime = 'application/atom+xml';
         }
 
-        header('X-Robots-Tag: ' . context::robotsPolicy($core->blog->settings->system->robots_policy, ''));
-        $core->tpl->setPath($core->tpl->getPath(), dirname(__FILE__) . '/default-templates');
+        header('X-Robots-Tag: ' . context::robotsPolicy(dcCore::app()->blog->settings->system->robots_policy, ''));
+        dcCore::app()->tpl->setPath(dcCore::app()->tpl->getPath(), __DIR__ . '/default-templates');
         self::serveDocument($tpl, $mime);
     }
 
@@ -54,13 +51,11 @@ class urlPrivate extends dcUrlHandlers
 
     public static function privateHandler($args)
     {
-        global $core, $_ctx;
-
         #New temporary urlHandlers
         $urlp       = new urlHandler();
-        $urlp->mode = $core->url->mode;
+        $urlp->mode = dcCore::app()->url->mode;
         $urlp->registerDefault(['urlPrivate', 'callbackfoo']);
-        foreach ($core->url->getTypes() as $k => $v) {
+        foreach (dcCore::app()->url->getTypes() as $k => $v) {
             $urlp->register($k, $v['url'], $v['representation'], ['urlPrivate', 'callbackfoo']);
         }
 
@@ -70,35 +65,35 @@ class urlPrivate extends dcUrlHandlers
         unset($urlp);
 
         #Looking for a new template (private.html)
-        $tplset = $core->themes->moduleInfo($core->blog->settings->system->theme, 'tplset');
-        if (!empty($tplset) && is_dir(dirname(__FILE__) . '/../default-templates/' . $tplset)) {
-            $core->tpl->setPath($core->tpl->getPath(), dirname(__FILE__) . '/../default-templates/' . $tplset);
+        $tplset = dcCore::app()->themes->moduleInfo(dcCore::app()->blog->settings->system->theme, 'tplset');
+        if (!empty($tplset) && is_dir(__DIR__ . '/../default-templates/' . $tplset)) {
+            dcCore::app()->tpl->setPath(dcCore::app()->tpl->getPath(), __DIR__ . '/../default-templates/' . $tplset);
         } else {
-            $core->tpl->setPath($core->tpl->getPath(), dirname(__FILE__) . '/../default-templates/' . DC_DEFAULT_TPLSET);
+            dcCore::app()->tpl->setPath(dcCore::app()->tpl->getPath(), __DIR__ . '/../default-templates/' . DC_DEFAULT_TPLSET);
         }
 
         #Load password from configuration
-        $password = $core->blog->settings->private->blog_private_pwd;
+        $password = dcCore::app()->blog->settings->private->blog_private_pwd;
 
         #Define allowed url->type
         $allowed_types = new ArrayObject(
             [
                 'feed', 'xslt', 'tag_feed', 'pubfeed', 'spamfeed',
                 'hamfeed', 'trackback', 'preview', 'pagespreview', 'contactme',
-                'rsd', 'xmlrpc'
+                'rsd', 'xmlrpc',
             ]
         );
-        $core->callBehavior('initPrivateMode', $allowed_types);
+        dcCore::app()->callBehavior('initPrivateMode', $allowed_types);
 
         #Generic behavior
-        $core->callBehavior('initPrivateHandler', $core);
+        dcCore::app()->callBehavior('initPrivateHandler', dcCore::app());
 
         #Let's go : define a new session and start it
-        if (!isset($session)) {
+        if (!isset($session)) {     // @phpstan-ignore-line
             $session = new sessionDB(
-                $core->con,
-                $core->prefix . 'session',
-                'dc_privateblog_sess_' . $core->blog->id,
+                dcCore::app()->con,
+                dcCore::app()->prefix . 'session',
+                'dc_privateblog_sess_' . dcCore::app()->blog->id,
                 '/'
             );
             $session->start();
@@ -108,7 +103,7 @@ class urlPrivate extends dcUrlHandlers
             return;
         }
         #Add cookie test (automatic login)
-        $cookiepass = 'dc_privateblog_cookie_' . $core->blog->id;
+        $cookiepass = 'dc_privateblog_cookie_' . dcCore::app()->blog->id;
 
         if (!empty($_COOKIE[$cookiepass])) {
             $cookiepassvalue = (($_COOKIE[$cookiepass]) == $password);
@@ -133,30 +128,30 @@ class urlPrivate extends dcUrlHandlers
 
                     return;
                 }
-                $_ctx->form_error = __('Wrong password');
+                dcCore::app()->ctx->form_error = __('Wrong password');
             }
             $session->destroy();
             self::serveDocument('private.html', 'text/html', false);
             # --BEHAVIOR-- publicAfterDocument
-            $core->callBehavior('publicAfterDocument', $core);
+            dcCore::app()->callBehavior('publicAfterDocument', dcCore::app());
             exit;
         } elseif ($_SESSION['sess_blog_private'] != $password) {
             $session->destroy();
             self::serveDocument('private.html', 'text/html', false);
             # --BEHAVIOR-- publicAfterDocument
-            $core->callBehavior('publicAfterDocument', $core);
+            dcCore::app()->callBehavior('publicAfterDocument', dcCore::app());
             exit;
         } elseif (isset($_POST['blogout'])) {
             $session->destroy();
             setcookie($cookiepass, 'ciao', time() - 86400, '/');
             // Redirection ??
-            if ($core->blog->settings->private->redirect_url != '') {
-                http::redirect($core->blog->settings->private->redirect_url);
+            if (dcCore::app()->blog->settings->private->redirect_url != '') {
+                http::redirect(dcCore::app()->blog->settings->private->redirect_url);
             } else {
-                $_ctx->form_error = __('You are now disconnected.');
+                dcCore::app()->ctx->form_error = __('You are now disconnected.');
                 self::serveDocument('private.html', 'text/html', false);
                 # --BEHAVIOR-- publicAfterDocument
-                $core->callBehavior('publicAfterDocument', $core);
+                dcCore::app()->callBehavior('publicAfterDocument', dcCore::app());
                 exit;
             }
         }

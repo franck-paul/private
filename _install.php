@@ -14,43 +14,51 @@ if (!defined('DC_CONTEXT_ADMIN')) {
     exit;
 }
 
-$new_version     = $core->plugins->moduleInfo('private', 'version');
-$current_version = $core->getVersion('private');
+$new_version     = dcCore::app()->plugins->moduleInfo('private', 'version');
+$current_version = dcCore::app()->getVersion('private');
 
 if (version_compare($current_version, $new_version, '>=')) {
     return;
 }
 
-$s = $core->blog->settings->private;
+$s = dcCore::app()->blog->settings->private;
 
-$s->put('private_flag',
+$s->put(
+    'private_flag',
     false,
     'boolean',
     'Private mode activation flag',
-    true, true
+    true,
+    true
 );
 
-$s->put('private_conauto_flag',
+$s->put(
+    'private_conauto_flag',
     false,
     'boolean',
     'Private mode automatic connection option',
-    true, true
+    true,
+    true
 );
 
-$s->put('message',
+$s->put(
+    'message',
     __('<h2>Private blog</h2><p class="message">You need the password to view this blog.</p>'),
     'string',
     'Private mode public welcome message',
-    true, true
+    true,
+    true
 );
 
-$s->put('redirect_url',
+$s->put(
+    'redirect_url',
     '',
     'string',
     'Private mode redirect URL after disconnection',
-    true, true
+    true,
+    true
 );
 
-$core->setVersion('private', $new_version);
+dcCore::app()->setVersion('private', $new_version);
 
 return true;

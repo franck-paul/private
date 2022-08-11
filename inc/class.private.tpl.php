@@ -18,7 +18,7 @@ class tplPrivate
 {
     public static function PrivateMsg($attr)
     {
-        $f = $GLOBALS['core']->tpl->getFilters($attr);
+        $f = dcCore::app()->tpl->getFilters($attr);
 
         return '<?php echo ' . sprintf($f, '$GLOBALS[\'core\']->blog->settings->private->message') . '; ?>';
     }
@@ -27,6 +27,6 @@ class tplPrivate
     {
         return '<?php echo(isset($_SERVER[\'REQUEST_URI\'])
             ? html::escapeHTML($_SERVER[\'REQUEST_URI\'])
-            : $core->blog->url); ?>';
+            : dcCore::app()->blog->url); ?>';
     }
 }

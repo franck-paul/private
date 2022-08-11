@@ -16,22 +16,22 @@ if (!defined('DC_CONTEXT_ADMIN')) {
 
 // Getting current settings
 $page_title           = __('Private mode');
-$s                    = &$core->blog->settings->private;
-$private_flag         = (boolean) $s->private_flag;
-$private_conauto_flag = (boolean) $s->private_conauto_flag;
-$message              = $s->message;
-$feed                 = $core->blog->url . $core->url->getURLFor('feed', 'atom');
-$comments_feed        = $core->blog->url . $core->url->getURLFor('feed', 'atom/comments');
-$redirect_url         = $s->redirect_url;
+$settings             = dcCore::app()->blog->settings->private;
+$private_flag         = (bool) $settings->private_flag;
+$private_conauto_flag = (bool) $settings->private_conauto_flag;
+$message              = $settings->message;
+$feed                 = dcCore::app()->blog->url . dcCore::app()->url->getURLFor('feed', 'atom');
+$comments_feed        = dcCore::app()->blog->url . dcCore::app()->url->getURLFor('feed', 'atom/comments');
+$redirect_url         = $settings->redirect_url;
 // editeur pour le message
-$post_editor = $core->auth->getOption('editor');
+$post_editor = dcCore::app()->auth->getOption('editor');
 $new_feeds   = $admin_post_behavior   = '';
 
 $img       = '<img alt="%1$s" title="%1$s" src="index.php?pf=private/%2$s" />';
 $img_title = ($private_flag) ? sprintf($img, __('Protected'), 'icon-alt.png') : sprintf($img, __('Non protected'), 'icon.png');
 
 if ($post_editor) {
-    $admin_post_behavior = $core->callBehavior(
+    $admin_post_behavior = dcCore::app()->callBehavior(
         'adminPostEditor',
         $post_editor['xhtml'],
         'private_page_message',
@@ -40,7 +40,7 @@ if ($post_editor) {
 }
 
 if (!empty($_POST['saveconfig'])) {
-    if (!empty($_POST['private_flag']) && empty($_POST['blog_private_pwd']) && empty($s->blog_private_pwd)) {
+    if (!empty($_POST['private_flag']) && empty($_POST['blog_private_pwd']) && empty($settings->blog_private_pwd)) {
         dcPage::addErrorNotice(__('No password set.'));
         http::redirect($p_url);
     }
@@ -51,35 +51,35 @@ if (!empty($_POST['saveconfig'])) {
         $message              = $_POST['private_page_message'];
         $redirect_url         = $_POST['redirect_url'];
 
-        $s->put('private_flag', $private_flag, 'boolean', 'Private mode activation flag');
-        $s->put('private_conauto_flag', $private_conauto_flag, 'boolean', 'Private mode automatic connection option');
-        $s->put('message', $message, 'string', 'Private mode public welcome message');
-        $s->put('redirect_url', $redirect_url, 'string', 'Private mode redirect URL after disconnection');
+        $settings->put('private_flag', $private_flag, 'boolean', 'Private mode activation flag');
+        $settings->put('private_conauto_flag', $private_conauto_flag, 'boolean', 'Private mode automatic connection option');
+        $settings->put('message', $message, 'string', 'Private mode public welcome message');
+        $settings->put('redirect_url', $redirect_url, 'string', 'Private mode redirect URL after disconnection');
 
         if (!empty($_POST['blog_private_pwd'])) {
             if ($_POST['blog_private_pwd'] != $_POST['blog_private_pwd_c']) {
-                $core->error->add(__("Passwords don't match"));
+                dcCore::app()->error->add(__("Passwords don't match"));
             } else {
                 $blog_private_pwd = md5($_POST['blog_private_pwd']);
-                $s->put('blog_private_pwd', $blog_private_pwd, 'string', 'Private blog password');
+                $settings->put('blog_private_pwd', $blog_private_pwd, 'string', 'Private blog password');
             }
         }
     } catch (Exception $e) {
-        $core->error->add($e->getMessage());
+        dcCore::app()->error->add($e->getMessage());
     }
 
-    if (!$core->error->flag()) {
-        $core->blog->triggerBlog();
+    if (!dcCore::app()->error->flag()) {
+        dcCore::app()->blog->triggerBlog();
         dcPage::addSuccessNotice(__('Configuration successfully updated.'));
         http::redirect($p_url);
     }
 }
 
-if ($s->blog_private_pwd === null) {
+if ($settings->blog_private_pwd === null) {
     dcPage::addWarningNotice(__('No password set.'));
 }
 
-if ($s->private_flag === true) {
+if ($settings->private_flag === true) {
     $new_feeds = '<h3 class="vertical-separator pretty-title">' . __('Syndication') . '</h3>
     <p class="warning">' . __('Feeds have changed, new are displayed below.') . '</p>
     <ul class="nice">
@@ -99,10 +99,10 @@ dcPage::jsLoad('js/jquery/jquery.ui.touch-punch.js') .
 dcPage::jsJson('pwstrength', [
     'min' => sprintf(__('Password strength: %s'), __('weak')),
     'avg' => sprintf(__('Password strength: %s'), __('medium')),
-    'max' => sprintf(__('Password strength: %s'), __('strong'))
+    'max' => sprintf(__('Password strength: %s'), __('strong')),
 ]) .
 dcPage::jsLoad('js/pwstrength.js') .
-dcPage::jsLoad(urldecode(dcPage::getPF('private/js/admin.js')), $core->getVersion('private'));
+dcPage::jsModuleLoad('private/js/admin.js', dcCore::app()->getVersion('private'));
 ?>
 </head>
 <body>
@@ -110,9 +110,10 @@ dcPage::jsLoad(urldecode(dcPage::getPF('private/js/admin.js')), $core->getVersio
 
 echo dcPage::breadcrumb(
     [
-        html::escapeHTML($core->blog->name)                                 => '',
-        '<span class="page-title">' . $page_title . '</span> ' . $img_title => ''
-    ]) .
+        html::escapeHTML(dcCore::app()->blog->name)                        => '',
+        '<span class="page-title">' . $page_title . '</span>' . $img_title => '',
+    ]
+) .
 dcPage::notices();
 
 echo
@@ -145,7 +146,7 @@ form::field('redirect_url', 50, 255, html::escapeHTML($redirect_url)) .
 '</p>' .
 $new_feeds .
 '<p>' . form::hidden(['p'], 'private') .
-$core->formNonce() .
+dcCore::app()->formNonce() .
 '<input type="submit" name="saveconfig" value="' . __('Save') . '" />
 </p>
 </form>

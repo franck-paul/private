@@ -18,15 +18,15 @@ $this->registerModule(
     'PrivateMode',                       // Name
     'Protect your blog with a password', // Description
     'Osku and contributors',             // Author
-    '1.11',                              // Version
+    '1.12',                              // Version
     [
-        'requires'    => [['core', '2.19']],                                 // Dependencies
+        'requires'    => [['core', '2.23']],                                 // Dependencies
         'permissions' => 'admin',                                            // Permissions
         'priority'    => 1501,                                               // Priority
         'type'        => 'plugin',                                           // Type
 
         'details'    => 'https://open-time.net/?q=private',       // Details URL
         'support'    => 'https://github.com/franck-paul/private', // Support URL
-        'repository' => 'https://raw.githubusercontent.com/franck-paul/private/master/dcstore.xml'
+        'repository' => 'https://raw.githubusercontent.com/franck-paul/private/master/dcstore.xml',
     ]
 );

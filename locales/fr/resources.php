@@ -12,5 +12,5 @@
  */
 
 if (!isset($__resources['help']['privatemode'])) {
-     $__resources['help']['privatemode'] = dirname(__FILE__).'/help/help.html';
+     $__resources['help']['privatemode'] = __DIR__.'/help/help.html';
 }

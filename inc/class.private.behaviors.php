@@ -16,12 +16,12 @@ if (!defined('DC_RC_PATH')) {
 
 class behaviorsPrivate
 {
-    public static function publicPrivateFormBeforeContent($core)
+    public static function publicPrivateFormBeforeContent($core = null)
     {
-        echo $core->blog->settings->private->message;
+        echo dcCore::app()->blog->settings->private->message;
     }
 
-    public static function publicPrivateFormAfterContent($core)
+    public static function publicPrivateFormAfterContent($core = null)
     {
         echo '<p><label class="classic">' .
         form::checkbox(['pass_remember'], 1) . ' ' .

@@ -18,18 +18,18 @@ class widgetsPrivate
 {
     public static function widgetLogout($w)
     {
-        if ($GLOBALS['core']->blog->settings->private->private_flag) {
+        if (dcCore::app()->blog->settings->private->private_flag) {
             if ($w->offline) {
                 return;
             }
 
-            if (($w->homeonly == 1 && !$core->url->isHome($core->url->type)) || ($w->homeonly == 2 && $core->url->isHome($core->url->type))) {
+            if (($w->homeonly == 1 && !dcCore::app()->url->isHome(dcCore::app()->url->type)) || ($w->homeonly == 2 && dcCore::app()->url->isHome(dcCore::app()->url->type))) {
                 return;
             }
 
             $res = ($w->title ? $w->renderTitle(html::escapeHTML($w->title)) : '') .
             '<p>' . $w->text . '</p>' .
-            '<form action="' . $GLOBALS['core']->blog->url . '" method="post">' .
+            '<form action="' . dcCore::app()->blog->url . '" method="post">' .
             '<p class="buttons">' .
             '<input type="hidden" name="blogout" id="blogout" value="" />' .
             '<input type="submit" value="' . html::escapeHTML($w->label) . '" class="logout" /></p>' .
