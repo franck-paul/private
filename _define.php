@@ -20,7 +20,7 @@ $this->registerModule(
     'Osku and contributors',             // Author
     '1.12',                              // Version
     [
-        'requires'    => [['core', '2.23']],                                 // Dependencies
+        'requires'    => [['core', '2.24']],                                 // Dependencies
         'permissions' => 'admin',                                            // Permissions
         'priority'    => 1501,                                               // Priority
         'type'        => 'plugin',                                           // Type

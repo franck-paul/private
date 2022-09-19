@@ -10,7 +10,6 @@
  * @copyright Osku
  * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
-
-if (!isset($__resources['help']['privatemode'])) {
-     $__resources['help']['privatemode'] = __DIR__.'/help/help.html';
+if (!isset(dcCore::app()->resources['help']['privatemode'])) {
+    dcCore::app()->resources['help']['privatemode'] = __DIR__ . '/help/help.html';
 }

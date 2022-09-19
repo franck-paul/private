@@ -80,7 +80,7 @@ class urlPrivate extends dcUrlHandlers
             [
                 'feed', 'xslt', 'tag_feed', 'pubfeed', 'spamfeed',
                 'hamfeed', 'trackback', 'preview', 'pagespreview', 'contactme',
-                'rsd', 'xmlrpc',
+                'xmlrpc',
             ]
         );
         dcCore::app()->callBehavior('initPrivateMode', $allowed_types);
@@ -113,7 +113,7 @@ class urlPrivate extends dcUrlHandlers
 
         #Let's rumble session, cookies & conf :)
         if (!isset($_SESSION['sess_blog_private']) || $_SESSION['sess_blog_private'] == '') {
-            if ($cookiepassvalue != false) {
+            if ($cookiepassvalue) {
                 $_SESSION['sess_blog_private'] = $_COOKIE[$cookiepass];
 
                 return;

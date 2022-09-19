@@ -20,10 +20,10 @@ class tplPrivate
     {
         $f = dcCore::app()->tpl->getFilters($attr);
 
-        return '<?php echo ' . sprintf($f, '$GLOBALS[\'core\']->blog->settings->private->message') . '; ?>';
+        return '<?php echo ' . sprintf($f, 'dcCore::app()->blog->settings->private->message') . '; ?>';
     }
 
-    public static function PrivateReqPage($attr)
+    public static function PrivateReqPage()
     {
         return '<?php echo(isset($_SERVER[\'REQUEST_URI\'])
             ? html::escapeHTML($_SERVER[\'REQUEST_URI\'])

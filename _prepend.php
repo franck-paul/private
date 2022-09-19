@@ -14,10 +14,10 @@ if (!defined('DC_RC_PATH')) {
     return;
 }
 
-$GLOBALS['__autoload']['behaviorsPrivate'] = __DIR__ . '/inc/class.private.behaviors.php';
-$GLOBALS['__autoload']['tplPrivate']       = __DIR__ . '/inc/class.private.tpl.php';
-$GLOBALS['__autoload']['widgetsPrivate']   = __DIR__ . '/inc/class.private.widgets.php';
-$GLOBALS['__autoload']['urlPrivate']       = __DIR__ . '/inc/class.private.urlhandlers.php';
+$__autoload['behaviorsPrivate'] = __DIR__ . '/inc/class.private.behaviors.php';
+$__autoload['tplPrivate']       = __DIR__ . '/inc/class.private.tpl.php';
+$__autoload['widgetsPrivate']   = __DIR__ . '/inc/class.private.widgets.php';
+$__autoload['urlPrivate']       = __DIR__ . '/inc/class.private.urlhandlers.php';
 
 require __DIR__ . '/_widgets.php';
 

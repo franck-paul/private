@@ -16,7 +16,7 @@ if (!defined('DC_CONTEXT_ADMIN')) {
 
 $icon_img = dcCore::app()->blog->settings->private->private_flag ? 'index.php?pf=private/icon-alt.svg' : 'index.php?pf=private/icon.svg';
 
-$_menu['Blog']->addItem(
+dcCore::app()->menu['Blog']->addItem(
     __('Private mode'),
     'plugin.php?p=private',
     $icon_img,
