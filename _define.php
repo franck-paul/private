@@ -15,18 +15,20 @@ if (!defined('DC_RC_PATH')) {
 }
 
 $this->registerModule(
-    'PrivateMode',                       // Name
-    'Protect your blog with a password', // Description
-    'Osku and contributors',             // Author
-    '1.12',                              // Version
+    'PrivateMode',
+    'Protect your blog with a password',
+    'Osku and contributors',
+    '2.0',
     [
-        'requires'    => [['core', '2.24']],                                 // Dependencies
-        'permissions' => 'admin',                                            // Permissions
-        'priority'    => 1501,                                               // Priority
-        'type'        => 'plugin',                                           // Type
+        'requires'    => [['core', '2.24']],
+        'permissions' => dcCore::app()->auth->makePermissions([
+            dcAuth::PERMISSION_ADMIN,
+        ]),
+        'priority' => 1501,
+        'type'     => 'plugin',
 
-        'details'    => 'https://open-time.net/?q=private',       // Details URL
-        'support'    => 'https://github.com/franck-paul/private', // Support URL
+        'details'    => 'https://open-time.net/?q=private',
+        'support'    => 'https://github.com/franck-paul/private',
         'repository' => 'https://raw.githubusercontent.com/franck-paul/private/master/dcstore.xml',
     ]
 );

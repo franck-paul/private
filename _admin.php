@@ -16,10 +16,12 @@ if (!defined('DC_CONTEXT_ADMIN')) {
 
 $icon_img = dcCore::app()->blog->settings->private->private_flag ? 'index.php?pf=private/icon-alt.svg' : 'index.php?pf=private/icon.svg';
 
-dcCore::app()->menu['Blog']->addItem(
+dcCore::app()->menu[dcAdmin::MENU_BLOG]->addItem(
     __('Private mode'),
     'plugin.php?p=private',
     $icon_img,
     preg_match('/plugin.php\?p=private(&.*)?$/', $_SERVER['REQUEST_URI']),
-    dcCore::app()->auth->check('admin', dcCore::app()->blog->id)
+    dcCore::app()->auth->check(dcCore::app()->auth->makePermissions([
+        dcAuth::PERMISSION_ADMIN,
+    ]), dcCore::app()->blog->id)
 );

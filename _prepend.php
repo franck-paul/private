@@ -14,12 +14,14 @@ if (!defined('DC_RC_PATH')) {
     return;
 }
 
-$__autoload['behaviorsPrivate'] = __DIR__ . '/inc/class.private.behaviors.php';
-$__autoload['tplPrivate']       = __DIR__ . '/inc/class.private.tpl.php';
-$__autoload['widgetsPrivate']   = __DIR__ . '/inc/class.private.widgets.php';
-$__autoload['urlPrivate']       = __DIR__ . '/inc/class.private.urlhandlers.php';
+Clearbricks::lib()->autoload([
+    'behaviorsPrivate' => __DIR__ . '/inc/class.private.behaviors.php',
+    'tplPrivate'       => __DIR__ . '/inc/class.private.tpl.php',
+    'widgetsPrivate'   => __DIR__ . '/inc/class.private.widgets.php',
+    'urlPrivate'       => __DIR__ . '/inc/class.private.urlhandlers.php',
+]);
 
-require __DIR__ . '/_widgets.php';
+require_once __DIR__ . '/_widgets.php';
 
 dcCore::app()->blog->settings->addNamespace('private');
 

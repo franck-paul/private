@@ -14,8 +14,6 @@ if (!defined('DC_RC_PATH')) {
     return;
 }
 
-dcCore::app()->addBehavior('initWidgets', ['privateWidgets', 'initWidgets']);
-
 class privateWidgets
 {
     public static function initWidgets($w)
@@ -31,3 +29,5 @@ class privateWidgets
             ->addOffline();
     }
 }
+
+dcCore::app()->addBehavior('initWidgets', [privateWidgets::class, 'initWidgets']);

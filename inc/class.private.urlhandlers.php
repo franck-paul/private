@@ -10,10 +10,6 @@
  * @copyright Osku
  * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
-if (!defined('DC_RC_PATH')) {
-    return;
-}
-
 class urlPrivate extends dcUrlHandlers
 {
     public static function feedXslt($args)
@@ -40,7 +36,7 @@ class urlPrivate extends dcUrlHandlers
         }
 
         header('X-Robots-Tag: ' . context::robotsPolicy(dcCore::app()->blog->settings->system->robots_policy, ''));
-        dcCore::app()->tpl->setPath(dcCore::app()->tpl->getPath(), __DIR__ . '/default-templates');
+        dcCore::app()->tpl->setPath(dcCore::app()->tpl->getPath(), __DIR__ . '/' . dcPublic::TPL_ROOT);
         self::serveDocument($tpl, $mime);
     }
 
@@ -49,7 +45,7 @@ class urlPrivate extends dcUrlHandlers
         #Woohoo :)
     }
 
-    public static function privateHandler($args)
+    public static function privateHandler()
     {
         #New temporary urlHandlers
         $urlp       = new urlHandler();
@@ -66,10 +62,10 @@ class urlPrivate extends dcUrlHandlers
 
         #Looking for a new template (private.html)
         $tplset = dcCore::app()->themes->moduleInfo(dcCore::app()->blog->settings->system->theme, 'tplset');
-        if (!empty($tplset) && is_dir(__DIR__ . '/../default-templates/' . $tplset)) {
-            dcCore::app()->tpl->setPath(dcCore::app()->tpl->getPath(), __DIR__ . '/../default-templates/' . $tplset);
+        if (!empty($tplset) && is_dir(__DIR__ . '/..' . '/' . dcPublic::TPL_ROOT . '/' . $tplset)) {
+            dcCore::app()->tpl->setPath(dcCore::app()->tpl->getPath(), __DIR__ . '/..' . '/' . dcPublic::TPL_ROOT . '/' . $tplset);
         } else {
-            dcCore::app()->tpl->setPath(dcCore::app()->tpl->getPath(), __DIR__ . '/../default-templates/' . DC_DEFAULT_TPLSET);
+            dcCore::app()->tpl->setPath(dcCore::app()->tpl->getPath(), __DIR__ . '/..' . '/' . dcPublic::TPL_ROOT . '/' . DC_DEFAULT_TPLSET);
         }
 
         #Load password from configuration
@@ -92,7 +88,7 @@ class urlPrivate extends dcUrlHandlers
         if (!isset($session)) {     // @phpstan-ignore-line
             $session = new sessionDB(
                 dcCore::app()->con,
-                dcCore::app()->prefix . 'session',
+                dcCore::app()->prefix . dcCore::SESSION_TABLE_NAME,
                 'dc_privateblog_sess_' . dcCore::app()->blog->id,
                 '/'
             );
@@ -133,13 +129,13 @@ class urlPrivate extends dcUrlHandlers
             $session->destroy();
             self::serveDocument('private.html', 'text/html', false);
             # --BEHAVIOR-- publicAfterDocument
-            dcCore::app()->callBehavior('publicAfterDocument', dcCore::app());
+            dcCore::app()->callBehavior('publicAfterDocumentV2');
             exit;
         } elseif ($_SESSION['sess_blog_private'] != $password) {
             $session->destroy();
             self::serveDocument('private.html', 'text/html', false);
             # --BEHAVIOR-- publicAfterDocument
-            dcCore::app()->callBehavior('publicAfterDocument', dcCore::app());
+            dcCore::app()->callBehavior('publicAfterDocumentV2');
             exit;
         } elseif (isset($_POST['blogout'])) {
             $session->destroy();
@@ -151,7 +147,7 @@ class urlPrivate extends dcUrlHandlers
                 dcCore::app()->ctx->form_error = __('You are now disconnected.');
                 self::serveDocument('private.html', 'text/html', false);
                 # --BEHAVIOR-- publicAfterDocument
-                dcCore::app()->callBehavior('publicAfterDocument', dcCore::app());
+                dcCore::app()->callBehavior('publicAfterDocumentV2');
                 exit;
             }
         }

@@ -14,17 +14,17 @@ if (!defined('DC_RC_PATH')) {
     return;
 }
 
-dcCore::app()->tpl->addValue('PrivateReqPage', ['tplPrivate', 'PrivateReqPage']);
-dcCore::app()->tpl->addValue('PrivateMsg', ['tplPrivate', 'PrivateMsg']);
+dcCore::app()->tpl->addValue('PrivateReqPage', [tplPrivate::class, 'PrivateReqPage']);
+dcCore::app()->tpl->addValue('PrivateMsg', [tplPrivate::class, 'PrivateMsg']);
 
 $s = dcCore::app()->blog->settings->private;
 
 if ($s->private_flag) {
-    dcCore::app()->addBehavior('publicBeforeDocument', ['urlPrivate', 'privateHandler']);
+    dcCore::app()->addBehavior('publicBeforeDocumentV2', [urlPrivate::class, 'privateHandler']);
 }
 
 if ($s->private_conauto_flag) {
-    dcCore::app()->addBehavior('publicPrivateFormAfterContent', ['behaviorsPrivate', 'publicPrivateFormAfterContent']);
+    dcCore::app()->addBehavior('publicPrivateFormAfterContent', [behaviorsPrivate::class, 'publicPrivateFormAfterContent']);
 }
 
-dcCore::app()->addBehavior('publicPrivateFormBeforeContent', ['behaviorsPrivate', 'publicPrivateFormBeforeContent']);
+dcCore::app()->addBehavior('publicPrivateFormBeforeContent', [behaviorsPrivate::class, 'publicPrivateFormBeforeContent']);
