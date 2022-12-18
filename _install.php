@@ -14,10 +14,7 @@ if (!defined('DC_CONTEXT_ADMIN')) {
     exit;
 }
 
-$new_version     = dcCore::app()->plugins->moduleInfo('private', 'version');
-$current_version = dcCore::app()->getVersion('private');
-
-if (version_compare((string) $current_version, $new_version, '>=')) {
+if (!dcCore::app()->newVersion(basename(__DIR__), dcCore::app()->plugins->moduleInfo(basename(__DIR__), 'version'))) {
     return;
 }
 
@@ -58,7 +55,5 @@ $s->put(
     true,
     true
 );
-
-dcCore::app()->setVersion('private', $new_version);
 
 return true;

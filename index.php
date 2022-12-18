@@ -25,7 +25,7 @@ $comments_feed        = dcCore::app()->blog->url . dcCore::app()->url->getURLFor
 $redirect_url         = $settings->redirect_url;
 // editeur pour le message
 $post_editor = dcCore::app()->auth->getOption('editor');
-$new_feeds   = $admin_post_behavior   = '';
+$new_feeds   = $admin_post_behavior = '';
 
 $img       = '<img alt="%1$s" title="%1$s" src="index.php?pf=private/%2$s" />';
 $img_title = ($private_flag) ? sprintf($img, __('Protected'), 'icon-alt.png') : sprintf($img, __('Non protected'), 'icon.png');
@@ -42,7 +42,7 @@ if ($post_editor) {
 if (!empty($_POST['saveconfig'])) {
     if (!empty($_POST['private_flag']) && empty($_POST['blog_private_pwd']) && empty($settings->blog_private_pwd)) {
         dcPage::addErrorNotice(__('No password set.'));
-        http::redirect($p_url);
+        http::redirect(dcCore::app()->admin->getPageURL());
     }
 
     try {
@@ -71,7 +71,7 @@ if (!empty($_POST['saveconfig'])) {
     if (!dcCore::app()->error->flag()) {
         dcCore::app()->blog->triggerBlog();
         dcPage::addSuccessNotice(__('Configuration successfully updated.'));
-        http::redirect($p_url);
+        http::redirect(dcCore::app()->admin->getPageURL());
     }
 }
 
@@ -118,7 +118,7 @@ dcPage::notices();
 
 echo
 '<div id="private_options">
-<form method="post" action="' . $p_url . '">
+<form method="post" action="' . dcCore::app()->admin->getPageURL() . '">
 <p>' .
 form::checkbox('private_flag', 1, $private_flag) .
 '<label class="classic" for="private_flag"> ' .
