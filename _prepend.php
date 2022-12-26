@@ -23,8 +23,6 @@ Clearbricks::lib()->autoload([
 
 require_once __DIR__ . '/_widgets.php';
 
-dcCore::app()->blog->settings->addNamespace('private');
-
 #Rewrite Feeds with new URL and representation
 $feeds_url = new ArrayObject(['feed', 'tag_feed']);
 dcCore::app()->callBehavior('initFeedsPrivateMode', $feeds_url);
