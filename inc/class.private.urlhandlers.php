@@ -23,7 +23,7 @@ class urlPrivate extends dcUrlHandlers
         $type = null;
         $mime = 'application/xml';
 
-        if (preg_match('#^(atom|rss2)$#', $args, $m)) {
+        if (preg_match('#^(atom|rss2)$#', (string) $args, $m)) {
             # Atom or RSS2 ?
             $type = $m[0];
         }
@@ -119,7 +119,7 @@ class urlPrivate extends dcUrlHandlers
                     $_SESSION['sess_blog_private'] = md5($_POST['private_pass']);
 
                     if (!empty($_POST['pass_remember'])) {
-                        setcookie($cookiepass, md5($_POST['private_pass']), time() + 31536000, '/');
+                        setcookie($cookiepass, md5($_POST['private_pass']), ['expires' => time() + 31_536_000, 'path' => '/']);
                     }
 
                     return;
@@ -139,7 +139,7 @@ class urlPrivate extends dcUrlHandlers
             exit;
         } elseif (isset($_POST['blogout'])) {
             $session->destroy();
-            setcookie($cookiepass, 'ciao', time() - 86400, '/');
+            setcookie($cookiepass, 'ciao', ['expires' => time() - 86400, 'path' => '/']);
             // Redirection ??
             if (dcCore::app()->blog->settings->private->redirect_url != '') {
                 http::redirect(dcCore::app()->blog->settings->private->redirect_url);
