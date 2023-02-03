@@ -23,34 +23,35 @@ Clearbricks::lib()->autoload([
 
 require_once __DIR__ . '/_widgets.php';
 
-dcCore::app()->blog->settings->addNamespace('private');
-
 #Rewrite Feeds with new URL and representation
 $feeds_url = new ArrayObject(['feed', 'tag_feed']);
 dcCore::app()->callBehavior('initFeedsPrivateMode', $feeds_url);
 
-if (dcCore::app()->blog->settings->private->private_flag) {
-    $privatefeed = dcCore::app()->blog->settings->private->blog_private_pwd;
+if (dcCore::app()->blog) {
+    dcCore::app()->blog->settings->addNamespace('private');
+    if (dcCore::app()->blog->settings->private->private_flag) {
+        $privatefeed = dcCore::app()->blog->settings->private->blog_private_pwd;
 
-    #Obfuscate all feeds URL
-    foreach (dcCore::app()->url->getTypes() as $k => $v) {
-        if (in_array($k, (array) $feeds_url)) {
-            dcCore::app()->url->register(
-                $k,
-                sprintf('%s/%s', $privatefeed, $v['url']),
-                sprintf('^%s/%s/(.+)$', $privatefeed, $v['url']),
-                $v['handler']
-            );
+        #Obfuscate all feeds URL
+        foreach (dcCore::app()->url->getTypes() as $k => $v) {
+            if (in_array($k, (array) $feeds_url)) {
+                dcCore::app()->url->register(
+                    $k,
+                    sprintf('%s/%s', $privatefeed, $v['url']),
+                    sprintf('^%s/%s/(.+)$', $privatefeed, $v['url']),
+                    $v['handler']
+                );
+            }
         }
+
+        dcCore::app()->url->register(
+            'pubfeed',
+            'feed',
+            '^feed/(.+)$',
+            ['urlPrivate', 'publicFeed']
+        );
+
+        #Trick..
+        dcCore::app()->url->register('xslt', 'feed/rss2/xslt', '^feed/rss2/xslt$', ['urlPrivate', 'feedXslt']);
     }
-
-    dcCore::app()->url->register(
-        'pubfeed',
-        'feed',
-        '^feed/(.+)$',
-        ['urlPrivate', 'publicFeed']
-    );
-
-    #Trick..
-    dcCore::app()->url->register('xslt', 'feed/rss2/xslt', '^feed/rss2/xslt$', ['urlPrivate', 'feedXslt']);
 }
