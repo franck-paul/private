@@ -22,7 +22,7 @@ class tplPrivate
     public static function PrivateReqPage()
     {
         return '<?php echo(isset($_SERVER[\'REQUEST_URI\'])
-            ? html::escapeHTML($_SERVER[\'REQUEST_URI\'])
+            ? \\Dotclear\\Helper\\Html\\Html::escapeHTML($_SERVER[\'REQUEST_URI\'])
             : dcCore::app()->blog->url); ?>';
     }
 }

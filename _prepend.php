@@ -10,6 +10,9 @@
  * @copyright Osku
  * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
+
+use Dotclear\Helper\Clearbricks;
+
 Clearbricks::lib()->autoload([
     'behaviorsPrivate' => __DIR__ . '/inc/class.private.behaviors.php',
     'tplPrivate'       => __DIR__ . '/inc/class.private.tpl.php',

@@ -10,6 +10,9 @@
  * @copyright Osku
  * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
+
+use Dotclear\Helper\Html\Html;
+
 class widgetsPrivate
 {
     public static function widgetLogout($w)
@@ -23,12 +26,12 @@ class widgetsPrivate
                 return;
             }
 
-            $res = ($w->title ? $w->renderTitle(html::escapeHTML($w->title)) : '') .
+            $res = ($w->title ? $w->renderTitle(Html::escapeHTML($w->title)) : '') .
             '<p>' . $w->text . '</p>' .
             '<form action="' . dcCore::app()->blog->url . '" method="post">' .
             '<p class="buttons">' .
             '<input type="hidden" name="blogout" id="blogout" value="" />' .
-            '<input type="submit" value="' . html::escapeHTML($w->label) . '" class="logout" /></p>' .
+            '<input type="submit" value="' . Html::escapeHTML($w->label) . '" class="logout" /></p>' .
                 '</form>';
 
             return $w->renderDiv($w->content_only, 'blogout ' . $w->class, '', $res);

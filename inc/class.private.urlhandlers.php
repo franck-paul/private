@@ -10,6 +10,9 @@
  * @copyright Osku
  * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
+
+use Dotclear\Helper\Network\Http;
+
 class urlPrivate extends dcUrlHandlers
 {
     public static function feedXslt($args)
@@ -142,7 +145,7 @@ class urlPrivate extends dcUrlHandlers
             setcookie($cookiepass, 'ciao', ['expires' => time() - 86400, 'path' => '/']);
             // Redirection ??
             if (dcCore::app()->blog->settings->private->redirect_url != '') {
-                http::redirect(dcCore::app()->blog->settings->private->redirect_url);
+                Http::redirect(dcCore::app()->blog->settings->private->redirect_url);
             } else {
                 dcCore::app()->ctx->form_error = __('You are now disconnected.');
                 self::serveDocument('private.html', 'text/html', false);

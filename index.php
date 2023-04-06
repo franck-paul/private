@@ -10,6 +10,10 @@
  * @copyright Osku
  * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
+
+use Dotclear\Helper\Html\Html;
+use Dotclear\Helper\Network\Http;
+
 if (!defined('DC_CONTEXT_ADMIN')) {
     exit;
 }
@@ -42,7 +46,7 @@ if ($post_editor) {
 if (!empty($_POST['saveconfig'])) {
     if (!empty($_POST['private_flag']) && empty($_POST['blog_private_pwd']) && empty($settings->blog_private_pwd)) {
         dcPage::addErrorNotice(__('No password set.'));
-        http::redirect(dcCore::app()->admin->getPageURL());
+        Http::redirect(dcCore::app()->admin->getPageURL());
     }
 
     try {
@@ -71,7 +75,7 @@ if (!empty($_POST['saveconfig'])) {
     if (!dcCore::app()->error->flag()) {
         dcCore::app()->blog->triggerBlog();
         dcPage::addSuccessNotice(__('Configuration successfully updated.'));
-        http::redirect(dcCore::app()->admin->getPageURL());
+        Http::redirect(dcCore::app()->admin->getPageURL());
     }
 }
 
@@ -92,8 +96,7 @@ if ($settings->private_flag === true) {
 <html>
 <head>
 <title><?php echo $page_title; ?></title>
-    <?php echo dcPage::jsToolBar() .
-$admin_post_behavior .
+    <?php echo $admin_post_behavior .
 dcPage::jsLoad('js/jquery/jquery-ui.custom.js') .
 dcPage::jsLoad('js/jquery/jquery.ui.touch-punch.js') .
 dcPage::jsJson('pwstrength', [
@@ -110,7 +113,7 @@ dcPage::jsModuleLoad('private/js/admin.js', dcCore::app()->getVersion('private')
 
 echo dcPage::breadcrumb(
     [
-        html::escapeHTML(dcCore::app()->blog->name)                        => '',
+        Html::escapeHTML(dcCore::app()->blog->name)                        => '',
         '<span class="page-title">' . $page_title . '</span>' . $img_title => '',
     ]
 ) .
@@ -134,7 +137,7 @@ form::password('blog_private_pwd_c', 20, 255) .
 '</p>
 <p class="area"><label>' .
 __('Message:') . '</label>' .
-form::textarea('private_page_message', 30, 7, html::escapeHTML($message), 'maximal') .
+form::textarea('private_page_message', 30, 7, Html::escapeHTML($message), 'maximal') .
 '</p>
 <p>' .
 form::checkbox('private_conauto_flag', 1, $private_conauto_flag) .
@@ -142,7 +145,7 @@ form::checkbox('private_conauto_flag', 1, $private_conauto_flag) .
 </p>
 <p><label for="redirect_url">' .
 __('Redirect URL after disconnection:') . '</label> ' .
-form::field('redirect_url', 50, 255, html::escapeHTML($redirect_url)) .
+form::field('redirect_url', 50, 255, Html::escapeHTML($redirect_url)) .
 '</p>' .
 $new_feeds .
 '<p>' . form::hidden(['p'], 'private') .
