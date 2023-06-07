@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Dotclear 2 private module\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-22 08:49+0200\n"
+"POT-Creation-Date: 2023-06-07 14:09+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,122 +24,125 @@ msgstr ""
 msgid "Restricted area"
 msgstr ""
 
-#: ../git-plugins/private/_admin.php:18 ../git-plugins/private/index.php:17
+#: ../git-plugins/private/src/Backend.php:28
+msgid "private"
+msgstr ""
+
+#: ../git-plugins/private/src/Backend.php:40
+#: ../git-plugins/private/src/Manage.php:160
+#: ../git-plugins/private/src/Manage.php:165
 msgid "Private mode"
 msgstr ""
 
-#: ../git-plugins/private/_install.php:40
-msgid "<h2>Private blog</h2><p class=\"message\">You need the password to view this blog.</p>"
+#: ../git-plugins/private/src/BackendBehaviors.php:23
+msgid "Private mode message"
 msgstr ""
 
-#: ../git-plugins/private/_widgets.php:22
-msgid "PrivateMode"
-msgstr ""
-
-#: ../git-plugins/private/_widgets.php:24
-#: ../git-plugins/private/_widgets.php:25
-msgid "Blog logout"
-msgstr ""
-
-#: ../git-plugins/private/_widgets.php:25
-msgid "Title:"
-msgstr ""
-
-#: ../git-plugins/private/_widgets.php:27
-msgid "Button:"
-msgstr ""
-
-#: ../git-plugins/private/_widgets.php:27
-msgid "Disconnect"
-msgstr ""
-
-#: ../git-plugins/private/inc/class.private.behaviors.php:27
+#: ../git-plugins/private/src/FrontendBehaviors.php:35
 msgid "Enable automatic connection"
 msgstr ""
 
-#: ../git-plugins/private/inc/class.private.urlhandlers.php:136
+#: ../git-plugins/private/src/FrontendUrl.php:135
 msgid "Wrong password"
 msgstr ""
 
-#: ../git-plugins/private/inc/class.private.urlhandlers.php:156
+#: ../git-plugins/private/src/FrontendUrl.php:155
 msgid "You are now disconnected."
 msgstr ""
 
-#: ../git-plugins/private/index.php:30
-msgid "Non protected"
+#: ../git-plugins/private/src/Install.php:43
+msgid "<h2>Private blog</h2><p class=\"message\">You need the password to view this blog.</p>"
 msgstr ""
 
-#: ../git-plugins/private/index.php:30
-msgid "Protected"
-msgstr ""
-
-#: ../git-plugins/private/index.php:55
-msgid "Passwords don't match"
-msgstr ""
-
-#: ../git-plugins/private/index.php:73
+#: ../git-plugins/private/src/Manage.php:62
+#: ../git-plugins/private/src/Manage.php:121
 msgid "No password set."
 msgstr ""
 
-#: ../git-plugins/private/index.php:79
+#: ../git-plugins/private/src/Manage.php:78
+msgid "Passwords don't match"
+msgstr ""
+
+#: ../git-plugins/private/src/Manage.php:118
+msgid "Non protected"
+msgstr ""
+
+#: ../git-plugins/private/src/Manage.php:118
+msgid "Protected"
+msgstr ""
+
+#: ../git-plugins/private/src/Manage.php:126
 msgid "Feeds have changed, new are displayed below."
 msgstr ""
 
-#: ../git-plugins/private/index.php:99 ../git-plugins/private/index.php:100
-#: ../git-plugins/private/index.php:101 ../git-plugins/private/index.php:102
-#: ../git-plugins/private/index.php:103
+#: ../git-plugins/private/src/Manage.php:137
+#: ../git-plugins/private/src/Manage.php:138
+#: ../git-plugins/private/src/Manage.php:139
 #, php-format
 msgid "Password strength: %s"
 msgstr ""
 
-#: ../git-plugins/private/index.php:99
-msgid "very weak"
-msgstr ""
-
-#: ../git-plugins/private/index.php:100
+#: ../git-plugins/private/src/Manage.php:137
 msgid "weak"
 msgstr ""
 
-#: ../git-plugins/private/index.php:101
-msgid "mediocre"
+#: ../git-plugins/private/src/Manage.php:138
+msgid "medium"
 msgstr ""
 
-#: ../git-plugins/private/index.php:102
+#: ../git-plugins/private/src/Manage.php:139
 msgid "strong"
 msgstr ""
 
-#: ../git-plugins/private/index.php:103
-msgid "very strong"
-msgstr ""
-
-#: ../git-plugins/private/index.php:124
+#: ../git-plugins/private/src/Manage.php:178
 msgid "Enable private mode"
 msgstr ""
 
-#: ../git-plugins/private/index.php:128
-msgid "Change blog password"
+#: ../git-plugins/private/src/Manage.php:181
+msgid "Password"
 msgstr ""
 
-#: ../git-plugins/private/index.php:130
+#: ../git-plugins/private/src/Manage.php:188
 msgid "New password:"
 msgstr ""
 
-#: ../git-plugins/private/index.php:137
+#: ../git-plugins/private/src/Manage.php:194
 msgid "Confirm password:"
 msgstr ""
 
-#: ../git-plugins/private/index.php:141
+#: ../git-plugins/private/src/Manage.php:198
+msgid "Options"
+msgstr ""
+
+#: ../git-plugins/private/src/Manage.php:206
 msgid "Message:"
 msgstr ""
 
-#: ../git-plugins/private/index.php:146
+#: ../git-plugins/private/src/Manage.php:211
 msgid "Propose automatic connection to visitors"
 msgstr ""
 
-#: ../git-plugins/private/index.php:149
+#: ../git-plugins/private/src/Manage.php:218
 msgid "Redirect URL after disconnection:"
 msgstr ""
 
-#: ../git-plugins/private/index.php:155
+#: ../git-plugins/private/src/Manage.php:224
 msgid "Save"
+msgstr ""
+
+#: ../git-plugins/private/src/Widgets.php:24
+#: ../git-plugins/private/src/Widgets.php:25
+msgid "Blog logout"
+msgstr ""
+
+#: ../git-plugins/private/src/Widgets.php:24
+msgid "PrivateMode"
+msgstr ""
+
+#: ../git-plugins/private/src/Widgets.php:27
+msgid "Button:"
+msgstr ""
+
+#: ../git-plugins/private/src/Widgets.php:27
+msgid "Disconnect"
 msgstr ""

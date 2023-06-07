@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: private 1.8.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-22 08:49+0200\n"
+"POT-Creation-Date: 2023-06-07 14:09+0200\n"
 "PO-Revision-Date: 2015-02-24T09:37:17+00:00\n"
 "Last-Translator: Greg\n"
 "Language-Team: \n"
@@ -21,26 +21,16 @@ msgstr "Accès au blog"
 msgid "Restricted area"
 msgstr "Zone d'accès restreint"
 
+#, fuzzy
+msgid "private"
+msgstr "Mode privé"
+
 msgid "Private mode"
 msgstr "Mode privé"
 
-msgid "<h2>Private blog</h2><p class=\"message\">You need the password to view this blog.</p>"
-msgstr "<h2>Blog privé</h2><p class=\"message\">Vous avez besoin du mot de passe pour visualiser le blog.</p>"
-
-msgid "PrivateMode"
+#, fuzzy
+msgid "Private mode message"
 msgstr "Mode privé"
-
-msgid "Blog logout"
-msgstr "Déconnexion du blog"
-
-msgid "Title:"
-msgstr "Titre :"
-
-msgid "Button:"
-msgstr "Bouton :"
-
-msgid "Disconnect"
-msgstr "Se déconnecter"
 
 msgid "Enable automatic connection"
 msgstr "Activer la connexion automatique"
@@ -51,32 +41,52 @@ msgstr "Mot de passe incorrect"
 msgid "You are now disconnected."
 msgstr "Vous êtes maintenant déconnecté(e)."
 
+msgid "<h2>Private blog</h2><p class=\"message\">You need the password to view this blog.</p>"
+msgstr "<h2>Blog privé</h2><p class=\"message\">Vous avez besoin du mot de passe pour visualiser le blog.</p>"
+
+msgid "No password set."
+msgstr "Aucun mot de passe défini."
+
+msgid "Passwords don't match"
+msgstr "Les mot de passe ne correspondent pas"
+
 msgid "Non protected"
 msgstr "Non protégé"
 
 msgid "Protected"
 msgstr "Protégé"
 
-msgid "Passwords don't match"
-msgstr "Les mot de passe ne correspondent pas"
-
-msgid "No password set."
-msgstr "Aucun mot de passe défini."
-
 msgid "Feeds have changed, new are displayed below."
 msgstr "Les fils de syndication ont changés, les nouveaux sont affichés ci-dessous."
+
+#, php-format
+msgid "Password strength: %s"
+msgstr ""
+
+msgid "weak"
+msgstr ""
+
+msgid "medium"
+msgstr ""
+
+msgid "strong"
+msgstr ""
 
 msgid "Enable private mode"
 msgstr "Activer le mode privé"
 
-msgid "Change blog password"
-msgstr "Changer le mot de passe du blog"
+#, fuzzy
+msgid "Password"
+msgstr "Nouveau mot de passe :"
 
 msgid "New password:"
 msgstr "Nouveau mot de passe :"
 
 msgid "Confirm password:"
 msgstr "Confirmer le mot de passe :"
+
+msgid "Options"
+msgstr ""
 
 msgid "Message:"
 msgstr "Message :"
@@ -89,3 +99,21 @@ msgstr "URL de redirection après la déconnexion :"
 
 msgid "Save"
 msgstr "Enregistrer"
+
+msgid "Blog logout"
+msgstr "Déconnexion du blog"
+
+msgid "PrivateMode"
+msgstr "Mode privé"
+
+msgid "Button:"
+msgstr "Bouton :"
+
+msgid "Disconnect"
+msgstr "Se déconnecter"
+
+#~ msgid "Title:"
+#~ msgstr "Titre :"
+
+#~ msgid "Change blog password"
+#~ msgstr "Changer le mot de passe du blog"
