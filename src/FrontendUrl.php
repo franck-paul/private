@@ -1,19 +1,29 @@
 <?php
 /**
- * @brief PrivateMode, a plugin for Dotclear 2
+ * @brief private, a plugin for Dotclear 2
  *
  * @package Dotclear
  * @subpackage Plugins
  *
- * @author Osku and contributors
+ * @author Franck Paul and contributors
  *
- * @copyright Osku
+ * @copyright Franck Paul carnet.franck.paul@gmail.com
  * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
+declare(strict_types=1);
 
+namespace Dotclear\Plugin\private;
+
+use ArrayObject;
+use context;
+use dcCore;
+use dcPublic;
+use dcUrlHandlers;
+use Dotclear\Database\Session;
 use Dotclear\Helper\Network\Http;
+use Dotclear\Helper\Network\UrlHandler;
 
-class urlPrivate extends dcUrlHandlers
+class FrontendUrl extends dcUrlHandlers
 {
     public static function feedXslt($args)
     {
@@ -43,38 +53,35 @@ class urlPrivate extends dcUrlHandlers
         self::serveDocument($tpl, $mime);
     }
 
-    public static function callbackfoo($args)
-    {
-        #Woohoo :)
-    }
-
     public static function privateHandler()
     {
-        #New temporary urlHandlers
-        $urlp       = new urlHandler();
+        $settings = dcCore::app()->blog->settings->get(My::id());
+
+        // New temporary UrlHandlers
+        $urlp       = new UrlHandler();
         $urlp->mode = dcCore::app()->url->mode;
-        $urlp->registerDefault(['urlPrivate', 'callbackfoo']);
+        $urlp->registerDefault(function () {});
         foreach (dcCore::app()->url->getTypes() as $k => $v) {
-            $urlp->register($k, $v['url'], $v['representation'], ['urlPrivate', 'callbackfoo']);
+            $urlp->register($k, $v['url'], $v['representation'], function () {});
         }
 
-        #Find type
+        // Find type
         $urlp->getDocument();
         $type = $urlp->type;
         unset($urlp);
 
-        #Looking for a new template (private.html)
+        // Looking for a new template (private.html)
         $tplset = dcCore::app()->themes->moduleInfo(dcCore::app()->blog->settings->system->theme, 'tplset');
-        if (!empty($tplset) && is_dir(__DIR__ . '/..' . '/' . dcPublic::TPL_ROOT . '/' . $tplset)) {
+        if (!empty($tplset) && is_dir(__DIR__ . '/../' . dcPublic::TPL_ROOT . '/' . $tplset)) {
             dcCore::app()->tpl->setPath(dcCore::app()->tpl->getPath(), __DIR__ . '/..' . '/' . dcPublic::TPL_ROOT . '/' . $tplset);
         } else {
             dcCore::app()->tpl->setPath(dcCore::app()->tpl->getPath(), __DIR__ . '/..' . '/' . dcPublic::TPL_ROOT . '/' . DC_DEFAULT_TPLSET);
         }
 
-        #Load password from configuration
-        $password = dcCore::app()->blog->settings->private->blog_private_pwd;
+        // Load password from configuration
+        $password = $settings->blog_private_pwd;
 
-        #Define allowed url->type
+        // Define allowed url->type
         $allowed_types = new ArrayObject(
             [
                 'feed', 'xslt', 'tag_feed', 'pubfeed', 'spamfeed',
@@ -88,15 +95,13 @@ class urlPrivate extends dcUrlHandlers
         dcCore::app()->callBehavior('initPrivateHandler', dcCore::app());
 
         #Let's go : define a new session and start it
-        if (!isset($session)) {     // @phpstan-ignore-line
-            $session = new sessionDB(
-                dcCore::app()->con,
-                dcCore::app()->prefix . dcCore::SESSION_TABLE_NAME,
-                'dc_privateblog_sess_' . dcCore::app()->blog->id,
-                '/'
-            );
-            $session->start();
-        }
+        $session = new Session(
+            dcCore::app()->con,
+            dcCore::app()->prefix . dcCore::SESSION_TABLE_NAME,
+            'dc_privateblog_sess_' . dcCore::app()->blog->id,
+            '/'
+        );
+        $session->start();
 
         if (in_array($type, (array) $allowed_types)) {
             return;
@@ -144,8 +149,8 @@ class urlPrivate extends dcUrlHandlers
             $session->destroy();
             setcookie($cookiepass, 'ciao', ['expires' => time() - 86400, 'path' => '/']);
             // Redirection ??
-            if (dcCore::app()->blog->settings->private->redirect_url != '') {
-                Http::redirect(dcCore::app()->blog->settings->private->redirect_url);
+            if ($settings->redirect_url != '') {
+                Http::redirect($settings->redirect_url);
             } else {
                 dcCore::app()->ctx->form_error = __('You are now disconnected.');
                 self::serveDocument('private.html', 'text/html', false);

@@ -9,28 +9,30 @@
 # DOT NOT MODIFY THIS FILE !
 #
 
-l10n::$locales['Access to blog'] = '';
-l10n::$locales['Restricted area'] = '';
-l10n::$locales['Private mode'] = '';
-l10n::$locales['<h2>Private blog</h2><p class="message">You need the password to view this blog.</p>'] = '';
-l10n::$locales['PrivateMode'] = '';
-l10n::$locales['Blog logout'] = '';
-l10n::$locales['Title:'] = '';
-l10n::$locales['Button:'] = '';
-l10n::$locales['Disconnect'] = '';
-l10n::$locales['Enable automatic connection'] = '';
-l10n::$locales['Wrong password'] = '';
-l10n::$locales['You are now disconnected.'] = '';
-l10n::$locales['Non protected'] = '';
-l10n::$locales['Protected'] = '';
-l10n::$locales['Passwords don\'t match'] = '';
-l10n::$locales['No password set.'] = '';
-l10n::$locales['Feeds have changed, new are displayed below.'] = '';
-l10n::$locales['Enable private mode'] = '';
-l10n::$locales['Change blog password'] = '';
-l10n::$locales['New password:'] = '';
-l10n::$locales['Confirm password:'] = '';
-l10n::$locales['Message:'] = '';
-l10n::$locales['Propose automatic connection to visitors'] = '';
-l10n::$locales['Redirect URL after disconnection:'] = '';
-l10n::$locales['Save'] = '';
+use Dotclear\Helper\L10n;
+
+L10n::$locales['Access to blog'] = '';
+L10n::$locales['Restricted area'] = '';
+L10n::$locales['Private mode'] = '';
+L10n::$locales['<h2>Private blog</h2><p class="message">You need the password to view this blog.</p>'] = '';
+L10n::$locales['PrivateMode'] = '';
+L10n::$locales['Blog logout'] = '';
+L10n::$locales['Title:'] = '';
+L10n::$locales['Button:'] = '';
+L10n::$locales['Disconnect'] = '';
+L10n::$locales['Enable automatic connection'] = '';
+L10n::$locales['Wrong password'] = '';
+L10n::$locales['You are now disconnected.'] = '';
+L10n::$locales['Non protected'] = '';
+L10n::$locales['Protected'] = '';
+L10n::$locales['Passwords don\'t match'] = '';
+L10n::$locales['No password set.'] = '';
+L10n::$locales['Feeds have changed, new are displayed below.'] = '';
+L10n::$locales['Enable private mode'] = '';
+L10n::$locales['Change blog password'] = '';
+L10n::$locales['New password:'] = '';
+L10n::$locales['Confirm password:'] = '';
+L10n::$locales['Message:'] = '';
+L10n::$locales['Propose automatic connection to visitors'] = '';
+L10n::$locales['Redirect URL after disconnection:'] = '';
+L10n::$locales['Save'] = '';

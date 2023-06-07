@@ -1,21 +1,27 @@
 <?php
 /**
- * @brief PrivateMode, a plugin for Dotclear 2
+ * @brief private, a plugin for Dotclear 2
  *
  * @package Dotclear
  * @subpackage Plugins
  *
- * @author Osku and contributors
+ * @author Franck Paul and contributors
  *
- * @copyright Osku
+ * @copyright Franck Paul carnet.franck.paul@gmail.com
  * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
-class privateWidgets
+declare(strict_types=1);
+
+namespace Dotclear\Plugin\private;
+
+use Dotclear\Plugin\widgets\WidgetsStack;
+
+class Widgets
 {
-    public static function initWidgets($w)
+    public static function initWidgets(WidgetsStack $w)
     {
         $w
-            ->create('privateblog', __('PrivateMode'), ['widgetsPrivate', 'widgetLogout'], null, __('Blog logout'))
+            ->create('privateblog', __('PrivateMode'), [FrontendWidgets::class, 'widgetLogout'], null, __('Blog logout'))
             ->addTitle(__('Blog logout'))
             ->setting('text', __('Text:'), '', 'textarea')
             ->setting('label', __('Button:'), __('Disconnect'))
@@ -25,5 +31,3 @@ class privateWidgets
             ->addOffline();
     }
 }
-
-dcCore::app()->addBehavior('initWidgets', [privateWidgets::class, 'initWidgets']);
