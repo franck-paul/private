@@ -192,9 +192,7 @@ class My
      */
     public static function icons(): array
     {
-        if (dcCore::app()->blog && dcCore::app()->blog->settings) {
-            $suffix = dcCore::app()->blog->settings->get(self::id())->private_flag ? '-alt' : '';
-        }
+        $suffix = dcCore::app()->blog->settings->get(self::id())->private_flag ? '-alt' : '';
 
         // Comment second line if you only have one icon.svg for both mode
         return [
