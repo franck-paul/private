@@ -30,7 +30,6 @@ use Dotclear\Helper\Html\Form\Text;
 use Dotclear\Helper\Html\Form\Textarea;
 use Dotclear\Helper\Html\Form\Url;
 use Dotclear\Helper\Html\Html;
-use Dotclear\Helper\Network\Http;
 use Exception;
 
 class Manage extends dcNsProcess
@@ -60,7 +59,7 @@ class Manage extends dcNsProcess
             try {
                 if (!empty($_POST['private_flag']) && empty($_POST['blog_private_pwd']) && empty($settings->blog_private_pwd)) {
                     dcPage::addErrorNotice(__('No password set.'));
-                    Http::redirect(dcCore::app()->admin->getPageURL());
+                    dcCore::app()->adminurl->redirect('admin.plugin.' . My::id());
                 }
 
                 $private_flag         = (empty($_POST['private_flag'])) ? false : true;
@@ -84,7 +83,7 @@ class Manage extends dcNsProcess
 
                 dcCore::app()->blog->triggerBlog();
                 dcPage::addSuccessNotice(__('Configuration successfully updated.'));
-                Http::redirect(dcCore::app()->admin->getPageURL());
+                dcCore::app()->adminurl->redirect('admin.plugin.' . My::id());
             } catch (Exception $e) {
                 dcCore::app()->error->add($e->getMessage());
             }
