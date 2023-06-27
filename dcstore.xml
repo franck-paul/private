@@ -1,10 +1,10 @@
 <modules xmlns:da="http://dotaddict.org/da/">
   <module id="private">
     <name>PrivateMode</name>
-    <version>3.4.1</version>
+    <version>3.4.2</version>
     <author>Osku and contributors</author>
     <desc>Protect your blog with a password</desc>
-    <file>https://github.com/franck-paul/private/releases/download/3.4.1/plugin-private-3.4.1.zip</file>
+    <file>https://github.com/franck-paul/private/releases/download/3.4.2/plugin-private-3.4.2.zip</file>
     <da:dcmin>2.26</da:dcmin>
     <da:details>https://open-time.net/?q=private</da:details>
     <da:support>https://github.com/franck-paul/private</da:support>
