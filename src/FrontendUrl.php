@@ -86,7 +86,7 @@ class FrontendUrl extends dcUrlHandlers
             [
                 'feed', 'xslt', 'tag_feed', 'pubfeed', 'spamfeed',
                 'hamfeed', 'trackback', 'preview', 'pagespreview', 'contactme',
-                'xmlrpc',
+                'xmlrpc', 'try',
             ]
         );
         dcCore::app()->callBehavior('initPrivateMode', $allowed_types);
@@ -122,6 +122,7 @@ class FrontendUrl extends dcUrlHandlers
 
                 return;
             }
+
             if (!empty($_POST['private_pass'])) {
                 if (md5($_POST['private_pass']) == $password) {
                     $_SESSION['sess_blog_private'] = md5($_POST['private_pass']);
