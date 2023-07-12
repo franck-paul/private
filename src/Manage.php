@@ -115,7 +115,7 @@ class Manage extends dcNsProcess
         $admin_post_behavior  = '';
 
         $img       = '<img alt="%1$s" title="%1$s" src="%2$s" />';
-        $img_title = ($private_flag) ? sprintf($img, __('Protected'), dcPage::getPF(My::id() . '/icon-alt.png')) : sprintf($img, __('Non protected'), dcPage::getPF(My::id() . '/icon.png'));
+        $img_title = ($private_flag) ? sprintf($img, __('Protected'), dcPage::getPF(My::id() . '/icon-alt.svg')) : sprintf($img, __('Non protected'), dcPage::getPF(My::id() . '/icon.svg'));
 
         if ($settings->blog_private_pwd === null) {
             dcPage::addWarningNotice(__('No password set.'));
