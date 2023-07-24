@@ -6,3 +6,4 @@
 [![Dotaddict](https://img.shields.io/badge/dotaddict-official-green.svg)](https://plugins.dotaddict.org/dc2/details/private)
 [![License](https://img.shields.io/github/license/franck-paul/private)](https://github.com/franck-paul/private/blob/master/LICENSE)
 
+Compatible with PHP 7.4 until version 2.1.1. Later versions require PHP 8.
