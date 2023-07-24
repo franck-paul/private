@@ -14,7 +14,7 @@ $this->registerModule(
     'PrivateMode',
     'Protect your blog with a password',
     'Osku and contributors',
-    '3.5',
+    '3.5.1',
     [
         'requires'    => [['core', '2.26'], ['php', '8.0']],
         'permissions' => dcCore::app()->auth->makePermissions([
