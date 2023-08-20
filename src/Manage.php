@@ -16,8 +16,9 @@ namespace Dotclear\Plugin\private;
 
 use dcCore;
 use dcNamespace;
-use dcNsProcess;
-use dcPage;
+use Dotclear\Core\Backend\Notices;
+use Dotclear\Core\Backend\Page;
+use Dotclear\Core\Process;
 use Dotclear\Helper\Html\Form\Checkbox;
 use Dotclear\Helper\Html\Form\Fieldset;
 use Dotclear\Helper\Html\Form\Form;
@@ -32,17 +33,14 @@ use Dotclear\Helper\Html\Form\Url;
 use Dotclear\Helper\Html\Html;
 use Exception;
 
-class Manage extends dcNsProcess
+class Manage extends Process
 {
-    protected static $init = false; /** @deprecated since 2.27 */
     /**
      * Initializes the page.
      */
     public static function init(): bool
     {
-        static::$init = My::checkContext(My::MANAGE);
-
-        return static::$init;
+        return self::status(My::checkContext(My::MANAGE));
     }
 
     /**
@@ -50,7 +48,7 @@ class Manage extends dcNsProcess
      */
     public static function process(): bool
     {
-        if (!static::$init) {
+        if (!self::status()) {
             return false;
         }
 
@@ -59,8 +57,8 @@ class Manage extends dcNsProcess
         if (!empty($_POST['saveconfig'])) {
             try {
                 if (!empty($_POST['private_flag']) && empty($_POST['blog_private_pwd']) && empty($settings->blog_private_pwd)) {
-                    dcPage::addErrorNotice(__('No password set.'));
-                    dcCore::app()->adminurl->redirect('admin.plugin.' . My::id());
+                    Notices::addErrorNotice(__('No password set.'));
+                    dcCore::app()->admin->url->redirect('admin.plugin.' . My::id());
                 }
 
                 $private_flag         = (empty($_POST['private_flag'])) ? false : true;
@@ -83,8 +81,8 @@ class Manage extends dcNsProcess
                 }
 
                 dcCore::app()->blog->triggerBlog();
-                dcPage::addSuccessNotice(__('Configuration successfully updated.'));
-                dcCore::app()->adminurl->redirect('admin.plugin.' . My::id());
+                Notices::addSuccessNotice(__('Configuration successfully updated.'));
+                dcCore::app()->admin->url->redirect('admin.plugin.' . My::id());
             } catch (Exception $e) {
                 dcCore::app()->error->add($e->getMessage());
             }
@@ -98,7 +96,7 @@ class Manage extends dcNsProcess
      */
     public static function render(): void
     {
-        if (!static::$init) {
+        if (!self::status()) {
             return;
         }
 
@@ -115,10 +113,10 @@ class Manage extends dcNsProcess
         $admin_post_behavior  = '';
 
         $img       = '<img alt="%1$s" title="%1$s" src="%2$s" />';
-        $img_title = ($private_flag) ? sprintf($img, __('Protected'), dcPage::getPF(My::id() . '/icon-alt.svg')) : sprintf($img, __('Non protected'), dcPage::getPF(My::id() . '/icon.svg'));
+        $img_title = ($private_flag) ? sprintf($img, __('Protected'), Page::getPF(My::id() . '/icon-alt.svg')) : sprintf($img, __('Non protected'), Page::getPF(My::id() . '/icon.svg'));
 
         if ($settings->blog_private_pwd === null) {
-            dcPage::addWarningNotice(__('No password set.'));
+            Notices::addWarningNotice(__('No password set.'));
         }
 
         if ($settings->private_flag === true) {
@@ -131,15 +129,15 @@ class Manage extends dcNsProcess
         }
 
         $head = $admin_post_behavior .
-            dcPage::jsLoad('js/jquery/jquery-ui.custom.js') .
-            dcPage::jsLoad('js/jquery/jquery.ui.touch-punch.js') .
-            dcPage::jsJson('pwstrength', [
+            Page::jsLoad('js/jquery/jquery-ui.custom.js') .
+            Page::jsLoad('js/jquery/jquery.ui.touch-punch.js') .
+            Page::jsJson('pwstrength', [
                 'min' => sprintf(__('Password strength: %s'), __('weak')),
                 'avg' => sprintf(__('Password strength: %s'), __('medium')),
                 'max' => sprintf(__('Password strength: %s'), __('strong')),
             ]) .
-            dcPage::jsLoad('js/pwstrength.js') .
-            dcPage::jsModuleLoad(My::id() . '/js/admin.js', dcCore::app()->getVersion(My::id()));
+            Page::jsLoad('js/pwstrength.js') .
+            My::jsLoad('admin.js');
 
         $rich_editor = dcCore::app()->auth->getOption('editor');
         $rte_flag    = true;
@@ -157,15 +155,15 @@ class Manage extends dcNsProcess
             );
         }
 
-        dcPage::openModule(__('Private mode'), $head);
+        Page::openModule(__('Private mode'), $head);
 
-        echo dcPage::breadcrumb(
+        echo Page::breadcrumb(
             [
                 Html::escapeHTML(dcCore::app()->blog->name) => '',
                 __('Private mode') . $img_title             => '',
             ]
         );
-        echo dcPage::notices();
+        echo Notices::getNotices();
 
         // Form
         echo (new Form('private'))
@@ -227,8 +225,8 @@ class Manage extends dcNsProcess
             ])
         ->render();
 
-        dcPage::helpBlock('privatemode');
+        Page::helpBlock('privatemode');
 
-        dcPage::closeModule();
+        Page::closeModule();
     }
 }

@@ -17,8 +17,8 @@ namespace Dotclear\Plugin\private;
 use ArrayObject;
 use context;
 use dcCore;
-use dcPublic;
 use dcUrlHandlers;
+use Dotclear\Core\Frontend\Utility;
 use Dotclear\Database\Session;
 use Dotclear\Helper\Network\Http;
 use Dotclear\Helper\Network\UrlHandler;
@@ -49,7 +49,7 @@ class FrontendUrl extends dcUrlHandlers
         }
 
         header('X-Robots-Tag: ' . context::robotsPolicy(dcCore::app()->blog->settings->system->robots_policy, ''));
-        dcCore::app()->tpl->setPath(dcCore::app()->tpl->getPath(), __DIR__ . '/' . dcPublic::TPL_ROOT);
+        dcCore::app()->tpl->setPath(dcCore::app()->tpl->getPath(), __DIR__ . '/' . Utility::TPL_ROOT);
         self::serveDocument($tpl, $mime);
     }
 
@@ -72,10 +72,10 @@ class FrontendUrl extends dcUrlHandlers
 
         // Looking for a new template (private.html)
         $tplset = dcCore::app()->themes->moduleInfo(dcCore::app()->blog->settings->system->theme, 'tplset');
-        if (!empty($tplset) && is_dir(__DIR__ . '/../' . dcPublic::TPL_ROOT . '/' . $tplset)) {
-            dcCore::app()->tpl->setPath(dcCore::app()->tpl->getPath(), My::path() . '/' . dcPublic::TPL_ROOT . '/' . $tplset);
+        if (!empty($tplset) && is_dir(__DIR__ . '/../' . Utility::TPL_ROOT . '/' . $tplset)) {
+            dcCore::app()->tpl->setPath(dcCore::app()->tpl->getPath(), My::path() . '/' . Utility::TPL_ROOT . '/' . $tplset);
         } else {
-            dcCore::app()->tpl->setPath(dcCore::app()->tpl->getPath(), My::path() . '/' . dcPublic::TPL_ROOT . '/' . DC_DEFAULT_TPLSET);
+            dcCore::app()->tpl->setPath(dcCore::app()->tpl->getPath(), My::path() . '/' . Utility::TPL_ROOT . '/' . DC_DEFAULT_TPLSET);
         }
 
         // Load password from configuration

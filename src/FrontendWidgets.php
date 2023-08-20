@@ -39,7 +39,7 @@ class FrontendWidgets
             '<input type="submit" value="' . Html::escapeHTML($w->label) . '" class="logout" /></p>' .
             '</form>';
 
-            return $w->renderDiv($w->content_only, 'blogout ' . $w->class, '', $res);
+            return $w->renderDiv((bool) $w->content_only, 'blogout ' . $w->class, '', $res);
         }
     }
 }

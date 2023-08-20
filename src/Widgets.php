@@ -21,7 +21,7 @@ class Widgets
     public static function initWidgets(WidgetsStack $w)
     {
         $w
-            ->create('privateblog', __('PrivateMode'), [FrontendWidgets::class, 'widgetLogout'], null, __('Blog logout'))
+            ->create('privateblog', __('PrivateMode'), FrontendWidgets::widgetLogout(...), null, __('Blog logout'))
             ->addTitle(__('Blog logout'))
             ->setting('text', __('Text:'), '', 'textarea')
             ->setting('label', __('Button:'), __('Disconnect'))

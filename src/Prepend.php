@@ -16,21 +16,18 @@ namespace Dotclear\Plugin\private;
 
 use ArrayObject;
 use dcCore;
-use dcNsProcess;
+use Dotclear\Core\Process;
 
-class Prepend extends dcNsProcess
+class Prepend extends Process
 {
-    protected static $init = false; /** @deprecated since 2.27 */
     public static function init(): bool
     {
-        static::$init = My::checkContext(My::PREPEND);
-
-        return static::$init;
+        return self::status(My::checkContext(My::PREPEND));
     }
 
     public static function process(): bool
     {
-        if (!static::$init) {
+        if (!self::status()) {
             return false;
         }
 
@@ -56,8 +53,8 @@ class Prepend extends dcNsProcess
                     }
                 }
 
-                dcCore::app()->url->register('pubfeed', 'feed', '^feed/(.+)$', [FrontendUrl::class, 'publicFeed']);
-                dcCore::app()->url->register('xslt', 'feed/rss2/xslt', '^feed/rss2/xslt$', [FrontendUrl::class, 'feedXslt']);
+                dcCore::app()->url->register('pubfeed', 'feed', '^feed/(.+)$', FrontendUrl::publicFeed(...));
+                dcCore::app()->url->register('xslt', 'feed/rss2/xslt', '^feed/rss2/xslt$', FrontendUrl::feedXslt(...));
             }
         }
 

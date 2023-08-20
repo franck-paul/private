@@ -14,43 +14,40 @@ declare(strict_types=1);
 
 namespace Dotclear\Plugin\private;
 
-use dcAdmin;
 use dcCore;
-use dcNsProcess;
+use Dotclear\Core\Backend\Menus;
+use Dotclear\Core\Process;
 
-class Backend extends dcNsProcess
+class Backend extends Process
 {
-    protected static $init = false; /** @deprecated since 2.27 */
     public static function init(): bool
     {
-        static::$init = My::checkContext(My::BACKEND);
-
         // dead but useful code, in order to have translations
         __('private') . __('private');
 
-        return static::$init;
+        return self::status(My::checkContext(My::BACKEND));
     }
 
     public static function process(): bool
     {
-        if (!static::$init) {
+        if (!self::status()) {
             return false;
         }
 
-        dcCore::app()->menu[dcAdmin::MENU_BLOG]->addItem(
+        dcCore::app()->admin->menus[Menus::MENU_BLOG]->addItem(
             __('Private mode'),
-            My::makeUrl(),
+            My::manageUrl(),
             My::icons(),
             preg_match(My::urlScheme(), $_SERVER['REQUEST_URI']),
             My::checkContext(My::MENU)
         );
 
         dcCore::app()->addBehaviors([
-            'adminRteFlagsV2' => [BackendBehaviors::class, 'adminRteFlags'],
+            'adminRteFlagsV2' => BackendBehaviors::adminRteFlags(...),
         ]);
 
         if (My::checkContext(My::WIDGETS)) {
-            dcCore::app()->addBehavior('initWidgets', [Widgets::class, 'initWidgets']);
+            dcCore::app()->addBehavior('initWidgets', Widgets::initWidgets(...));
         }
 
         return true;

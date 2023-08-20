@@ -15,40 +15,37 @@ declare(strict_types=1);
 namespace Dotclear\Plugin\private;
 
 use dcCore;
-use dcNsProcess;
+use Dotclear\Core\Process;
 
-class Frontend extends dcNsProcess
+class Frontend extends Process
 {
-    protected static $init = false; /** @deprecated since 2.27 */
     public static function init(): bool
     {
-        static::$init = My::checkContext(My::FRONTEND);
-
-        return static::$init;
+        return self::status(My::checkContext(My::FRONTEND));
     }
 
     public static function process(): bool
     {
-        if (!static::$init) {
+        if (!self::status()) {
             return false;
         }
 
-        dcCore::app()->tpl->addValue('PrivateReqPage', [FrontendTemplate::class, 'PrivateReqPage']);
-        dcCore::app()->tpl->addValue('PrivateMsg', [FrontendTemplate::class, 'PrivateMsg']);
+        dcCore::app()->tpl->addValue('PrivateReqPage', FrontendTemplate::PrivateReqPage(...));
+        dcCore::app()->tpl->addValue('PrivateMsg', FrontendTemplate::PrivateMsg(...));
 
         $settings = dcCore::app()->blog->settings->private;
 
         if ($settings->private_flag) {
-            dcCore::app()->addBehavior('publicBeforeDocumentV2', [FrontendUrl::class, 'privateHandler']);
+            dcCore::app()->addBehavior('publicBeforeDocumentV2', FrontendUrl::privateHandler(...));
         }
 
         if ($settings->private_conauto_flag) {
-            dcCore::app()->addBehavior('publicPrivateFormAfterContent', [FrontendBehaviors::class, 'publicPrivateFormAfterContent']);
+            dcCore::app()->addBehavior('publicPrivateFormAfterContent', FrontendBehaviors::publicPrivateFormAfterContent(...));
         }
 
-        dcCore::app()->addBehavior('publicPrivateFormBeforeContent', [FrontendBehaviors::class, 'publicPrivateFormBeforeContent']);
+        dcCore::app()->addBehavior('publicPrivateFormBeforeContent', FrontendBehaviors::publicPrivateFormBeforeContent(...));
 
-        dcCore::app()->addBehavior('initWidgets', [Widgets::class, 'initWidgets']);
+        dcCore::app()->addBehavior('initWidgets', Widgets::initWidgets(...));
 
         return true;
     }

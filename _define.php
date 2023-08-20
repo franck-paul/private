@@ -16,7 +16,7 @@ $this->registerModule(
     'Osku and contributors',
     '3.5.1',
     [
-        'requires'    => [['core', '2.26'], ['php', '8.0']],
+        'requires'    => [['core', '2.27'], ['php', '8.1']],
         'permissions' => dcCore::app()->auth->makePermissions([
             dcAuth::PERMISSION_ADMIN,
         ]),
