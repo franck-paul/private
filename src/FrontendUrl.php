@@ -55,7 +55,7 @@ class FrontendUrl extends dcUrlHandlers
 
     public static function privateHandler()
     {
-        $settings = dcCore::app()->blog->settings->get(My::id());
+        $settings = My::settings();
 
         // New temporary UrlHandlers
         $urlp       = new UrlHandler();

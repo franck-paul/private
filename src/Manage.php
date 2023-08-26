@@ -52,7 +52,7 @@ class Manage extends Process
             return false;
         }
 
-        $settings = dcCore::app()->blog->settings->get(My::id());
+        $settings = My::settings();
 
         if (!empty($_POST['saveconfig'])) {
             try {
@@ -100,7 +100,7 @@ class Manage extends Process
             return;
         }
 
-        $settings = dcCore::app()->blog->settings->get(My::id());
+        $settings = My::settings();
 
         // Getting current settings
         $private_flag         = (bool) $settings->private_flag;
@@ -155,7 +155,7 @@ class Manage extends Process
             );
         }
 
-        Page::openModule(__('Private mode'), $head);
+        Page::openModule(My::name(), $head);
 
         echo Page::breadcrumb(
             [
@@ -220,7 +220,7 @@ class Manage extends Process
                 (new Para())->items([
                     (new Submit(['saveconfig']))
                         ->value(__('Save')),
-                    dcCore::app()->formNonce(false),
+                    ... My::hiddenFields(),
                 ]),
             ])
         ->render();

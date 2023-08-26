@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace Dotclear\Plugin\private;
 
-use dcCore;
 use Dotclear\Helper\Html\Form\Checkbox;
 use Dotclear\Helper\Html\Form\Label;
 use Dotclear\Helper\Html\Form\Para;
@@ -23,7 +22,7 @@ class FrontendBehaviors
 {
     public static function publicPrivateFormBeforeContent()
     {
-        echo dcCore::app()->blog->settings->get(My::id())->message;
+        echo My::settings()->message;
     }
 
     public static function publicPrivateFormAfterContent()

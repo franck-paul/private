@@ -22,7 +22,7 @@ class FrontendWidgets
 {
     public static function widgetLogout(WidgetsElement $w)
     {
-        if (dcCore::app()->blog->settings->get(My::id())->private_flag) {
+        if (My::settings()?->private_flag) {
             if ($w->offline) {
                 return;
             }

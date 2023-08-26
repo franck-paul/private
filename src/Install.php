@@ -34,7 +34,7 @@ class Install extends Process
 
         try {
             // Init
-            $settings = dcCore::app()->blog->settings->get(My::id());
+            $settings = My::settings();
 
             $settings->put('private_flag', false, dcNamespace::NS_BOOL, 'Private mode activation flag', false, true);
             $settings->put('private_conauto_flag', false, dcNamespace::NS_BOOL, 'Private mode automatic connection option', false, true);

@@ -31,7 +31,7 @@ class Prepend extends Process
             return false;
         }
 
-        $settings = dcCore::app()->blog->settings->get(My::id());
+        $settings = My::settings();
 
         // Rewrite Feeds with new URL and representation
         $feeds_url = new ArrayObject(['feed', 'tag_feed']);
