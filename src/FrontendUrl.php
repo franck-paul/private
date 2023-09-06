@@ -96,7 +96,7 @@ class FrontendUrl extends dcUrlHandlers
 
         #Let's go : define a new session and start it
         $session = new Session(
-            dcCore::app()->con,
+            dcCore::app()->con, // @phpstan-ignore-line
             dcCore::app()->prefix . dcCore::SESSION_TABLE_NAME,
             'dc_privateblog_sess_' . dcCore::app()->blog->id,
             '/'

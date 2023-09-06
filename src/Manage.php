@@ -112,7 +112,7 @@ class Manage extends Process
         $new_feeds            = '';
         $admin_post_behavior  = '';
 
-        $img       = '<img alt="%1$s" title="%1$s" src="%2$s" />';
+        $img       = '<img alt="%1$s" title="%1$s" src="%2$s" class="private-state" />';
         $img_title = ($private_flag) ? sprintf($img, __('Protected'), Page::getPF(My::id() . '/icon-alt.svg')) : sprintf($img, __('Non protected'), Page::getPF(My::id() . '/icon.svg'));
 
         if ($settings->blog_private_pwd === null) {
@@ -137,6 +137,7 @@ class Manage extends Process
                 'max' => sprintf(__('Password strength: %s'), __('strong')),
             ]) .
             Page::jsLoad('js/pwstrength.js') .
+            My::cssLoad('admin.css') .
             My::jsLoad('admin.js');
 
         $rich_editor = dcCore::app()->auth->getOption('editor');
