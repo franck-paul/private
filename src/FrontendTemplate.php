@@ -14,19 +14,28 @@ declare(strict_types=1);
 
 namespace Dotclear\Plugin\private;
 
+use ArrayObject;
 use dcCore;
 use Dotclear\Helper\Html\Html;
 
 class FrontendTemplate
 {
-    public static function PrivateMsg($attr)
+    /**
+     * @param      array<string, mixed>|\ArrayObject<string, mixed>  $attr      The attribute
+     *
+     * @return     string
+     */
+    public static function PrivateMsg(array|ArrayObject $attr): string
     {
         $f = dcCore::app()->tpl->getFilters($attr);
 
         return '<?php echo ' . sprintf($f, 'dcCore::app()->blog->settings->' . My::id() . '->message') . '; ?>';
     }
 
-    public static function PrivateReqPage()
+    /**
+     * @return     string
+     */
+    public static function PrivateReqPage(): string
     {
         return '<?php echo(isset($_SERVER[\'REQUEST_URI\'])
             ? ' . Html::class . '::escapeHTML($_SERVER[\'REQUEST_URI\'])

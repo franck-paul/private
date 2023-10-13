@@ -20,12 +20,14 @@ use Dotclear\Helper\Html\Form\Para;
 
 class FrontendBehaviors
 {
-    public static function publicPrivateFormBeforeContent()
+    public static function publicPrivateFormBeforeContent(): string
     {
         echo My::settings()->message;
+
+        return '';
     }
 
-    public static function publicPrivateFormAfterContent()
+    public static function publicPrivateFormAfterContent(): string
     {
         echo (new Para())
         ->items([
@@ -34,5 +36,7 @@ class FrontendBehaviors
                 ->label((new Label(__('Enable automatic connection'), Label::INSIDE_TEXT_AFTER))),
         ])
         ->render();
+
+        return '';
     }
 }

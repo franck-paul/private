@@ -25,12 +25,18 @@ use Dotclear\Helper\Network\UrlHandler;
 
 class FrontendUrl extends dcUrlHandlers
 {
-    public static function feedXslt($args)
+    /**
+     * @param      null|string  $args   The arguments
+     */
+    public static function feedXslt(?string $args): void
     {
         self::serveDocument('rss2.xsl', 'text/xml');
     }
 
-    public static function publicFeed($args)
+    /**
+     * @param      null|string  $args   The arguments
+     */
+    public static function publicFeed(?string $args): void
     {
         #Don't reinvent the wheel - take a look to dcUrlHandlers/feed
         $type = null;
@@ -53,7 +59,7 @@ class FrontendUrl extends dcUrlHandlers
         self::serveDocument($tpl, $mime);
     }
 
-    public static function privateHandler()
+    public static function privateHandler(): string
     {
         $settings = My::settings();
 
@@ -104,7 +110,7 @@ class FrontendUrl extends dcUrlHandlers
         $session->start();
 
         if (in_array($type, (array) $allowed_types)) {
-            return;
+            return '';
         }
         #Add cookie test (automatic login)
         $cookiepass = 'dc_privateblog_cookie_' . dcCore::app()->blog->id;
@@ -120,7 +126,7 @@ class FrontendUrl extends dcUrlHandlers
             if ($cookiepassvalue) {
                 $_SESSION['sess_blog_private'] = $_COOKIE[$cookiepass];
 
-                return;
+                return '';
             }
 
             if (!empty($_POST['private_pass'])) {
@@ -131,7 +137,7 @@ class FrontendUrl extends dcUrlHandlers
                         setcookie($cookiepass, md5($_POST['private_pass']), ['expires' => time() + 31_536_000, 'path' => '/']);
                     }
 
-                    return;
+                    return '';
                 }
                 dcCore::app()->ctx->form_error = __('Wrong password');
             }
@@ -160,5 +166,7 @@ class FrontendUrl extends dcUrlHandlers
                 exit;
             }
         }
+
+        return '';
     }
 }

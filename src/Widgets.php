@@ -18,7 +18,7 @@ use Dotclear\Plugin\widgets\WidgetsStack;
 
 class Widgets
 {
-    public static function initWidgets(WidgetsStack $w)
+    public static function initWidgets(WidgetsStack $w): string
     {
         $w
             ->create('privateblog', __('PrivateMode'), FrontendWidgets::widgetLogout(...), null, __('Blog logout'))
@@ -29,5 +29,7 @@ class Widgets
             ->addContentOnly()
             ->addClass()
             ->addOffline();
+
+        return '';
     }
 }

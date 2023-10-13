@@ -20,15 +20,15 @@ use Dotclear\Plugin\widgets\WidgetsElement;
 
 class FrontendWidgets
 {
-    public static function widgetLogout(WidgetsElement $w)
+    public static function widgetLogout(WidgetsElement $w): string
     {
         if (My::settings()->private_flag) {
             if ($w->offline) {
-                return;
+                return '';
             }
 
             if (($w->homeonly == 1 && !dcCore::app()->url->isHome(dcCore::app()->url->type)) || ($w->homeonly == 2 && dcCore::app()->url->isHome(dcCore::app()->url->type))) {
-                return;
+                return '';
             }
 
             $res = ($w->title ? $w->renderTitle(Html::escapeHTML($w->title)) : '') .
@@ -41,5 +41,7 @@ class FrontendWidgets
 
             return $w->renderDiv((bool) $w->content_only, 'blogout ' . $w->class, '', $res);
         }
+
+        return '';
     }
 }
