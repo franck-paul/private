@@ -29,7 +29,7 @@ class FrontendTemplate
     {
         $f = dcCore::app()->tpl->getFilters($attr);
 
-        return '<?php echo ' . sprintf($f, 'dcCore::app()->blog->settings->' . My::id() . '->message') . '; ?>';
+        return '<?php echo ' . sprintf($f, 'App::blog()->settings()->' . My::id() . '->message') . '; ?>';
     }
 
     /**
@@ -39,6 +39,6 @@ class FrontendTemplate
     {
         return '<?php echo(isset($_SERVER[\'REQUEST_URI\'])
             ? ' . Html::class . '::escapeHTML($_SERVER[\'REQUEST_URI\'])
-            : dcCore::app()->blog->url); ?>';
+            : App::blog()->url()); ?>';
     }
 }

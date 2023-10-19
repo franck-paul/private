@@ -18,6 +18,7 @@ use ArrayObject;
 use context;
 use dcCore;
 use dcUrlHandlers;
+use Dotclear\App;
 use Dotclear\Core\Frontend\Utility;
 use Dotclear\Database\Session;
 use Dotclear\Helper\Network\Http;
@@ -54,7 +55,7 @@ class FrontendUrl extends dcUrlHandlers
             $mime = 'application/atom+xml';
         }
 
-        header('X-Robots-Tag: ' . context::robotsPolicy(dcCore::app()->blog->settings->system->robots_policy, ''));
+        header('X-Robots-Tag: ' . context::robotsPolicy(App::blog()->settings()->system->robots_policy, ''));
         dcCore::app()->tpl->setPath(dcCore::app()->tpl->getPath(), __DIR__ . '/' . Utility::TPL_ROOT);
         self::serveDocument($tpl, $mime);
     }
@@ -77,7 +78,7 @@ class FrontendUrl extends dcUrlHandlers
         unset($urlp);
 
         // Looking for a new template (private.html)
-        $tplset = dcCore::app()->themes->moduleInfo(dcCore::app()->blog->settings->system->theme, 'tplset');
+        $tplset = dcCore::app()->themes->moduleInfo(App::blog()->settings()->system->theme, 'tplset');
         if (!empty($tplset) && is_dir(__DIR__ . '/../' . Utility::TPL_ROOT . '/' . $tplset)) {
             dcCore::app()->tpl->setPath(dcCore::app()->tpl->getPath(), My::path() . '/' . Utility::TPL_ROOT . '/' . $tplset);
         } else {
@@ -104,7 +105,7 @@ class FrontendUrl extends dcUrlHandlers
         $session = new Session(
             dcCore::app()->con, // @phpstan-ignore-line
             dcCore::app()->prefix . dcCore::SESSION_TABLE_NAME,
-            'dc_privateblog_sess_' . dcCore::app()->blog->id,
+            'dc_privateblog_sess_' . App::blog()->id(),
             '/'
         );
         $session->start();
@@ -113,7 +114,7 @@ class FrontendUrl extends dcUrlHandlers
             return '';
         }
         #Add cookie test (automatic login)
-        $cookiepass = 'dc_privateblog_cookie_' . dcCore::app()->blog->id;
+        $cookiepass = 'dc_privateblog_cookie_' . App::blog()->id();
 
         if (!empty($_COOKIE[$cookiepass])) {
             $cookiepassvalue = (($_COOKIE[$cookiepass]) == $password);

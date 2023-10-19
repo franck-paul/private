@@ -16,6 +16,7 @@ namespace Dotclear\Plugin\private;
 
 use dcCore;
 use dcNamespace;
+use Dotclear\App;
 use Dotclear\Core\Backend\Notices;
 use Dotclear\Core\Backend\Page;
 use Dotclear\Core\Process;
@@ -58,7 +59,7 @@ class Manage extends Process
             try {
                 if (!empty($_POST['private_flag']) && empty($_POST['blog_private_pwd']) && empty($settings->blog_private_pwd)) {
                     Notices::addErrorNotice(__('No password set.'));
-                    dcCore::app()->admin->url->redirect('admin.plugin.' . My::id());
+                    dcCore::app()->adminurl->redirect('admin.plugin.' . My::id());
                 }
 
                 $private_flag         = (empty($_POST['private_flag'])) ? false : true;
@@ -80,9 +81,9 @@ class Manage extends Process
                     }
                 }
 
-                dcCore::app()->blog->triggerBlog();
+                App::blog()->triggerBlog();
                 Notices::addSuccessNotice(__('Configuration successfully updated.'));
-                dcCore::app()->admin->url->redirect('admin.plugin.' . My::id());
+                dcCore::app()->adminurl->redirect('admin.plugin.' . My::id());
             } catch (Exception $e) {
                 dcCore::app()->error->add($e->getMessage());
             }
@@ -106,8 +107,8 @@ class Manage extends Process
         $private_flag         = (bool) $settings->private_flag;
         $private_conauto_flag = (bool) $settings->private_conauto_flag;
         $message              = $settings->message;
-        $feed                 = dcCore::app()->blog->url . dcCore::app()->url->getURLFor('feed', 'atom');
-        $comments_feed        = dcCore::app()->blog->url . dcCore::app()->url->getURLFor('feed', 'atom/comments');
+        $feed                 = App::blog()->url() . dcCore::app()->url->getURLFor('feed', 'atom');
+        $comments_feed        = App::blog()->url() . dcCore::app()->url->getURLFor('feed', 'atom/comments');
         $redirect_url         = $settings->redirect_url;
         $new_feeds            = '';
         $admin_post_behavior  = '';
@@ -160,8 +161,8 @@ class Manage extends Process
 
         echo Page::breadcrumb(
             [
-                Html::escapeHTML(dcCore::app()->blog->name) => '',
-                __('Private mode') . $img_title             => '',
+                Html::escapeHTML(App::blog()->name()) => '',
+                __('Private mode') . $img_title       => '',
             ]
         );
         echo Notices::getNotices();

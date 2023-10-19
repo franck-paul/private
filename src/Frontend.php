@@ -33,7 +33,7 @@ class Frontend extends Process
         dcCore::app()->tpl->addValue('PrivateReqPage', FrontendTemplate::PrivateReqPage(...));
         dcCore::app()->tpl->addValue('PrivateMsg', FrontendTemplate::PrivateMsg(...));
 
-        $settings = dcCore::app()->blog->settings->private;
+        $settings = My::settings();
 
         if ($settings->private_flag) {
             dcCore::app()->addBehavior('publicBeforeDocumentV2', FrontendUrl::privateHandler(...));
