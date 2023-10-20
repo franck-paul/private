@@ -14,8 +14,6 @@ declare(strict_types=1);
 
 namespace Dotclear\Plugin\private;
 
-use dcCore;
-use dcNamespace;
 use Dotclear\App;
 use Dotclear\Core\Backend\Notices;
 use Dotclear\Core\Backend\Page;
@@ -59,7 +57,7 @@ class Manage extends Process
             try {
                 if (!empty($_POST['private_flag']) && empty($_POST['blog_private_pwd']) && empty($settings->blog_private_pwd)) {
                     Notices::addErrorNotice(__('No password set.'));
-                    dcCore::app()->adminurl->redirect('admin.plugin.' . My::id());
+                    My::redirect();
                 }
 
                 $private_flag         = (empty($_POST['private_flag'])) ? false : true;
@@ -67,25 +65,25 @@ class Manage extends Process
                 $message              = $_POST['private_page_message'];
                 $redirect_url         = $_POST['redirect_url'];
 
-                $settings->put('private_flag', $private_flag, dcNamespace::NS_BOOL, 'Private mode activation flag');
-                $settings->put('private_conauto_flag', $private_conauto_flag, dcNamespace::NS_BOOL, 'Private mode automatic connection option');
-                $settings->put('message', $message, dcNamespace::NS_STRING, 'Private mode public welcome message');
-                $settings->put('redirect_url', $redirect_url, dcNamespace::NS_STRING, 'Private mode redirect URL after disconnection');
+                $settings->put('private_flag', $private_flag, App::blogWorkspace()::NS_BOOL, 'Private mode activation flag');
+                $settings->put('private_conauto_flag', $private_conauto_flag, App::blogWorkspace()::NS_BOOL, 'Private mode automatic connection option');
+                $settings->put('message', $message, App::blogWorkspace()::NS_STRING, 'Private mode public welcome message');
+                $settings->put('redirect_url', $redirect_url, App::blogWorkspace()::NS_STRING, 'Private mode redirect URL after disconnection');
 
                 if (!empty($_POST['blog_private_pwd'])) {
                     if ($_POST['blog_private_pwd'] != $_POST['blog_private_pwd_c']) {
-                        dcCore::app()->error->add(__("Passwords don't match"));
+                        App::error()->add(__("Passwords don't match"));
                     } else {
                         $blog_private_pwd = md5($_POST['blog_private_pwd']);
-                        $settings->put('blog_private_pwd', $blog_private_pwd, dcNamespace::NS_STRING, 'Private blog password');
+                        $settings->put('blog_private_pwd', $blog_private_pwd, App::blogWorkspace()::NS_STRING, 'Private blog password');
                     }
                 }
 
                 App::blog()->triggerBlog();
                 Notices::addSuccessNotice(__('Configuration successfully updated.'));
-                dcCore::app()->adminurl->redirect('admin.plugin.' . My::id());
+                My::redirect();
             } catch (Exception $e) {
-                dcCore::app()->error->add($e->getMessage());
+                App::error()->add($e->getMessage());
             }
         }
 
@@ -107,8 +105,8 @@ class Manage extends Process
         $private_flag         = (bool) $settings->private_flag;
         $private_conauto_flag = (bool) $settings->private_conauto_flag;
         $message              = $settings->message;
-        $feed                 = App::blog()->url() . dcCore::app()->url->getURLFor('feed', 'atom');
-        $comments_feed        = App::blog()->url() . dcCore::app()->url->getURLFor('feed', 'atom/comments');
+        $feed                 = App::blog()->url() . App::url()->getURLFor('feed', 'atom');
+        $comments_feed        = App::blog()->url() . App::url()->getURLFor('feed', 'atom/comments');
         $redirect_url         = $settings->redirect_url;
         $new_feeds            = '';
         $admin_post_behavior  = '';
@@ -141,14 +139,14 @@ class Manage extends Process
             My::cssLoad('admin.css') .
             My::jsLoad('admin.js');
 
-        $rich_editor = dcCore::app()->auth->getOption('editor');
+        $rich_editor = App::auth()->getOption('editor');
         $rte_flag    = true;
-        $rte_flags   = @dcCore::app()->auth->user_prefs->interface->rte_flags;
+        $rte_flags   = @App::auth()->prefs()->interface->rte_flags;
         if (is_array($rte_flags) && in_array('private', $rte_flags)) {
             $rte_flag = $rte_flags['private'];
         }
         if ($rte_flag) {
-            $head .= dcCore::app()->callBehavior(
+            $head .= App::behavior()->callBehavior(
                 'adminPostEditor',
                 $rich_editor['xhtml'],
                 'private_page_message',
@@ -169,7 +167,7 @@ class Manage extends Process
 
         // Form
         echo (new Form('private'))
-            ->action(dcCore::app()->admin->getPageURL())
+            ->action(App::backend()->getPageURL())
             ->method('post')
             ->fields([
                 (new Para())->items([
@@ -201,7 +199,7 @@ class Manage extends Process
                             (new Textarea('private_page_message', Html::escapeHTML($message)))
                             ->cols(60)
                             ->rows(10)
-                            ->lang(dcCore::app()->auth->getInfo('user_lang'))
+                            ->lang(App::auth()->getInfo('user_lang'))
                             ->spellcheck(true)
                             ->label((new Label(__('Message:'), Label::OUTSIDE_LABEL_BEFORE))),
                         ]),

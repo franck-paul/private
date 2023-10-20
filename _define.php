@@ -17,11 +17,9 @@ $this->registerModule(
     '4.0.1',
     [
         'requires'    => [['core', '2.28']],
-        'permissions' => dcCore::app()->auth->makePermissions([
-            dcAuth::PERMISSION_ADMIN,
-        ]),
-        'priority' => 1501,
-        'type'     => 'plugin',
+        'permissions' => 'My',
+        'priority'    => 1501,
+        'type'        => 'plugin',
 
         'details'    => 'https://open-time.net/?q=private',
         'support'    => 'https://github.com/franck-paul/private',

@@ -10,6 +10,4 @@
  * @copyright Osku
  * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
-if (!isset(dcCore::app()->resources['help']['privatemode'])) {
-    dcCore::app()->resources['help']['privatemode'] = __DIR__ . '/help/help.html';
-}
+\Dotclear\App::backend()->resources()->set('help', 'privatemode', __DIR__ . '/help/help.html');

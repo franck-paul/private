@@ -14,8 +14,7 @@ declare(strict_types=1);
 
 namespace Dotclear\Plugin\private;
 
-use dcCore;
-use dcNamespace;
+use Dotclear\App;
 use Dotclear\Core\Process;
 use Exception;
 
@@ -36,12 +35,12 @@ class Install extends Process
             // Init
             $settings = My::settings();
 
-            $settings->put('private_flag', false, dcNamespace::NS_BOOL, 'Private mode activation flag', false, true);
-            $settings->put('private_conauto_flag', false, dcNamespace::NS_BOOL, 'Private mode automatic connection option', false, true);
-            $settings->put('message', __('<h2>Private blog</h2><p class="message">You need the password to view this blog.</p>'), dcNamespace::NS_STRING, 'Private mode public welcome message', false, true);
-            $settings->put('redirect_url', '', dcNamespace::NS_STRING, 'Private mode redirect URL after disconnection', false, true);
+            $settings->put('private_flag', false, App::blogWorkspace()::NS_BOOL, 'Private mode activation flag', false, true);
+            $settings->put('private_conauto_flag', false, App::blogWorkspace()::NS_BOOL, 'Private mode automatic connection option', false, true);
+            $settings->put('message', __('<h2>Private blog</h2><p class="message">You need the password to view this blog.</p>'), App::blogWorkspace()::NS_STRING, 'Private mode public welcome message', false, true);
+            $settings->put('redirect_url', '', App::blogWorkspace()::NS_STRING, 'Private mode redirect URL after disconnection', false, true);
         } catch (Exception $e) {
-            dcCore::app()->error->add($e->getMessage());
+            App::error()->add($e->getMessage());
         }
 
         return true;

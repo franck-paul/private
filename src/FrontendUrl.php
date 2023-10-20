@@ -15,16 +15,15 @@ declare(strict_types=1);
 namespace Dotclear\Plugin\private;
 
 use ArrayObject;
-use context;
-use dcCore;
-use dcUrlHandlers;
 use Dotclear\App;
+use Dotclear\Core\Frontend\Ctx;
+use Dotclear\Core\Frontend\Url;
 use Dotclear\Core\Frontend\Utility;
 use Dotclear\Database\Session;
 use Dotclear\Helper\Network\Http;
 use Dotclear\Helper\Network\UrlHandler;
 
-class FrontendUrl extends dcUrlHandlers
+class FrontendUrl extends Url
 {
     /**
      * @param      null|string  $args   The arguments
@@ -39,7 +38,7 @@ class FrontendUrl extends dcUrlHandlers
      */
     public static function publicFeed(?string $args): void
     {
-        #Don't reinvent the wheel - take a look to dcUrlHandlers/feed
+        #Don't reinvent the wheel - take a look to Url/feed
         $type = null;
         $mime = 'application/xml';
 
@@ -55,8 +54,8 @@ class FrontendUrl extends dcUrlHandlers
             $mime = 'application/atom+xml';
         }
 
-        header('X-Robots-Tag: ' . context::robotsPolicy(App::blog()->settings()->system->robots_policy, ''));
-        dcCore::app()->tpl->setPath(dcCore::app()->tpl->getPath(), __DIR__ . '/' . Utility::TPL_ROOT);
+        header('X-Robots-Tag: ' . Ctx::robotsPolicy(App::blog()->settings()->system->robots_policy, ''));
+        App::frontend()->template()->setPath(App::frontend()->template()->getPath(), __DIR__ . '/' . Utility::TPL_ROOT);
         self::serveDocument($tpl, $mime);
     }
 
@@ -66,9 +65,9 @@ class FrontendUrl extends dcUrlHandlers
 
         // New temporary UrlHandlers
         $urlp       = new UrlHandler();
-        $urlp->mode = dcCore::app()->url->mode;
+        $urlp->mode = App::url()->mode;
         $urlp->registerDefault(function () {});
-        foreach (dcCore::app()->url->getTypes() as $k => $v) {
+        foreach (App::url()->getTypes() as $k => $v) {
             $urlp->register($k, $v['url'], $v['representation'], function () {});
         }
 
@@ -78,11 +77,11 @@ class FrontendUrl extends dcUrlHandlers
         unset($urlp);
 
         // Looking for a new template (private.html)
-        $tplset = dcCore::app()->themes->moduleInfo(App::blog()->settings()->system->theme, 'tplset');
+        $tplset = App::themes()->moduleInfo(App::blog()->settings()->system->theme, 'tplset');
         if (!empty($tplset) && is_dir(__DIR__ . '/../' . Utility::TPL_ROOT . '/' . $tplset)) {
-            dcCore::app()->tpl->setPath(dcCore::app()->tpl->getPath(), My::path() . '/' . Utility::TPL_ROOT . '/' . $tplset);
+            App::frontend()->template()->setPath(App::frontend()->template()->getPath(), My::path() . '/' . Utility::TPL_ROOT . '/' . $tplset);
         } else {
-            dcCore::app()->tpl->setPath(dcCore::app()->tpl->getPath(), My::path() . '/' . Utility::TPL_ROOT . '/' . DC_DEFAULT_TPLSET);
+            App::frontend()->template()->setPath(App::frontend()->template()->getPath(), My::path() . '/' . Utility::TPL_ROOT . '/' . DC_DEFAULT_TPLSET);
         }
 
         // Load password from configuration
@@ -96,15 +95,15 @@ class FrontendUrl extends dcUrlHandlers
                 'xmlrpc', 'try',
             ]
         );
-        dcCore::app()->callBehavior('initPrivateMode', $allowed_types);
+        App::behavior()->callBehavior('initPrivateMode', $allowed_types);
 
         #Generic behavior
-        dcCore::app()->callBehavior('initPrivateHandler', dcCore::app());
+        App::behavior()->callBehavior('initPrivateHandler');
 
         #Let's go : define a new session and start it
         $session = new Session(
-            dcCore::app()->con, // @phpstan-ignore-line
-            dcCore::app()->prefix . dcCore::SESSION_TABLE_NAME,
+            App::con(),
+            App::con()->prefix() . App::session()::SESSION_TABLE_NAME,
             'dc_privateblog_sess_' . App::blog()->id(),
             '/'
         );
@@ -140,18 +139,18 @@ class FrontendUrl extends dcUrlHandlers
 
                     return '';
                 }
-                dcCore::app()->ctx->form_error = __('Wrong password');
+                App::frontend()->context()->form_error = __('Wrong password');
             }
             $session->destroy();
             self::serveDocument('private.html', 'text/html', false);
             # --BEHAVIOR-- publicAfterDocument
-            dcCore::app()->callBehavior('publicAfterDocumentV2');
+            App::behavior()->callBehavior('publicAfterDocumentV2');
             exit;
         } elseif ($_SESSION['sess_blog_private'] != $password) {
             $session->destroy();
             self::serveDocument('private.html', 'text/html', false);
             # --BEHAVIOR-- publicAfterDocument
-            dcCore::app()->callBehavior('publicAfterDocumentV2');
+            App::behavior()->callBehavior('publicAfterDocumentV2');
             exit;
         } elseif (isset($_POST['blogout'])) {
             $session->destroy();
@@ -160,10 +159,10 @@ class FrontendUrl extends dcUrlHandlers
             if ($settings->redirect_url != '') {
                 Http::redirect($settings->redirect_url);
             } else {
-                dcCore::app()->ctx->form_error = __('You are now disconnected.');
+                App::frontend()->context()->form_error = __('You are now disconnected.');
                 self::serveDocument('private.html', 'text/html', false);
                 # --BEHAVIOR-- publicAfterDocument
-                dcCore::app()->callBehavior('publicAfterDocumentV2');
+                App::behavior()->callBehavior('publicAfterDocumentV2');
                 exit;
             }
         }

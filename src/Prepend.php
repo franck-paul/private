@@ -15,7 +15,7 @@ declare(strict_types=1);
 namespace Dotclear\Plugin\private;
 
 use ArrayObject;
-use dcCore;
+use Dotclear\App;
 use Dotclear\Core\Process;
 
 class Prepend extends Process
@@ -35,16 +35,16 @@ class Prepend extends Process
 
         // Rewrite Feeds with new URL and representation
         $feeds_url = new ArrayObject(['feed', 'tag_feed']);
-        dcCore::app()->callBehavior('initFeedsPrivateMode', $feeds_url);
+        App::behavior()->callBehavior('initFeedsPrivateMode', $feeds_url);
 
-        if (dcCore::app()->blog) {
+        if (App::blog()->isDefined()) {
             if ($settings->private_flag) {
                 $privatefeed = $settings->blog_private_pwd;
 
                 // Obfuscate all feeds URL
-                foreach (dcCore::app()->url->getTypes() as $k => $v) {
+                foreach (App::url()->getTypes() as $k => $v) {
                     if (in_array($k, (array) $feeds_url)) {
-                        dcCore::app()->url->register(
+                        App::url()->register(
                             $k,
                             sprintf('%s/%s', $privatefeed, $v['url']),
                             sprintf('^%s/%s/(.+)$', $privatefeed, $v['url']),
@@ -53,8 +53,8 @@ class Prepend extends Process
                     }
                 }
 
-                dcCore::app()->url->register('pubfeed', 'feed', '^feed/(.+)$', FrontendUrl::publicFeed(...));
-                dcCore::app()->url->register('xslt', 'feed/rss2/xslt', '^feed/rss2/xslt$', FrontendUrl::feedXslt(...));
+                App::url()->register('pubfeed', 'feed', '^feed/(.+)$', FrontendUrl::publicFeed(...));
+                App::url()->register('xslt', 'feed/rss2/xslt', '^feed/rss2/xslt$', FrontendUrl::feedXslt(...));
             }
         }
 

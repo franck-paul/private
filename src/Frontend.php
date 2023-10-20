@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace Dotclear\Plugin\private;
 
-use dcCore;
+use Dotclear\App;
 use Dotclear\Core\Process;
 
 class Frontend extends Process
@@ -30,22 +30,22 @@ class Frontend extends Process
             return false;
         }
 
-        dcCore::app()->tpl->addValue('PrivateReqPage', FrontendTemplate::PrivateReqPage(...));
-        dcCore::app()->tpl->addValue('PrivateMsg', FrontendTemplate::PrivateMsg(...));
+        App::frontend()->template()->addValue('PrivateReqPage', FrontendTemplate::PrivateReqPage(...));
+        App::frontend()->template()->addValue('PrivateMsg', FrontendTemplate::PrivateMsg(...));
 
         $settings = My::settings();
 
         if ($settings->private_flag) {
-            dcCore::app()->addBehavior('publicBeforeDocumentV2', FrontendUrl::privateHandler(...));
+            App::behavior()->addBehavior('publicBeforeDocumentV2', FrontendUrl::privateHandler(...));
         }
 
         if ($settings->private_conauto_flag) {
-            dcCore::app()->addBehavior('publicPrivateFormAfterContent', FrontendBehaviors::publicPrivateFormAfterContent(...));
+            App::behavior()->addBehavior('publicPrivateFormAfterContent', FrontendBehaviors::publicPrivateFormAfterContent(...));
         }
 
-        dcCore::app()->addBehavior('publicPrivateFormBeforeContent', FrontendBehaviors::publicPrivateFormBeforeContent(...));
+        App::behavior()->addBehavior('publicPrivateFormBeforeContent', FrontendBehaviors::publicPrivateFormBeforeContent(...));
 
-        dcCore::app()->addBehavior('initWidgets', Widgets::initWidgets(...));
+        App::behavior()->addBehavior('initWidgets', Widgets::initWidgets(...));
 
         return true;
     }

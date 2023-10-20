@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace Dotclear\Plugin\private;
 
-use dcCore;
+use Dotclear\App;
 use Dotclear\Core\Backend\Menus;
 use Dotclear\Core\Process;
 
@@ -36,12 +36,12 @@ class Backend extends Process
 
         My::addBackendMenuItem(Menus::MENU_BLOG);
 
-        dcCore::app()->addBehaviors([
+        App::behavior()->addBehaviors([
             'adminRteFlagsV2' => BackendBehaviors::adminRteFlags(...),
         ]);
 
         if (My::checkContext(My::WIDGETS)) {
-            dcCore::app()->addBehavior('initWidgets', Widgets::initWidgets(...));
+            App::behavior()->addBehavior('initWidgets', Widgets::initWidgets(...));
         }
 
         return true;

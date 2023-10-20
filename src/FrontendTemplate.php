@@ -15,7 +15,7 @@ declare(strict_types=1);
 namespace Dotclear\Plugin\private;
 
 use ArrayObject;
-use dcCore;
+use Dotclear\App;
 use Dotclear\Helper\Html\Html;
 
 class FrontendTemplate
@@ -27,7 +27,7 @@ class FrontendTemplate
      */
     public static function PrivateMsg(array|ArrayObject $attr): string
     {
-        $f = dcCore::app()->tpl->getFilters($attr);
+        $f = App::frontend()->template()->getFilters($attr);
 
         return '<?php echo ' . sprintf($f, 'App::blog()->settings()->' . My::id() . '->message') . '; ?>';
     }
