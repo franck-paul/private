@@ -32,11 +32,11 @@ class FrontendWidgets
             }
 
             $res = ($w->title ? $w->renderTitle(Html::escapeHTML($w->title)) : '') .
-            '<p>' . $w->text . '</p>' .
+            '<p>' . $w->get('text') . '</p>' .
             '<form action="' . App::blog()->url() . '" method="post">' .
             '<p class="buttons">' .
             '<input type="hidden" name="blogout" id="blogout" value="" />' .
-            '<input type="submit" value="' . Html::escapeHTML($w->label) . '" class="logout" /></p>' .
+            '<input type="submit" value="' . Html::escapeHTML($w->get('label')) . '" class="logout" /></p>' .
             '</form>';
 
             return $w->renderDiv((bool) $w->content_only, 'blogout ' . $w->class, '', $res);
