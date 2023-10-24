@@ -55,7 +55,12 @@ class FrontendUrl extends Url
         }
 
         header('X-Robots-Tag: ' . Ctx::robotsPolicy(App::blog()->settings()->system->robots_policy, ''));
-        App::frontend()->template()->setPath(App::frontend()->template()->getPath(), __DIR__ . '/' . Utility::TPL_ROOT);
+        $tplset = App::themes()->moduleInfo(App::blog()->settings()->system->theme, 'tplset');
+        if (!empty($tplset) && is_dir(implode(DIRECTORY_SEPARATOR, [My::path(), Utility::TPL_ROOT, $tplset]))) {
+            App::frontend()->template()->appendPath(implode(DIRECTORY_SEPARATOR, [My::path(), Utility::TPL_ROOT, $tplset]));
+        } else {
+            App::frontend()->template()->appendPath(implode(DIRECTORY_SEPARATOR, [My::path(), Utility::TPL_ROOT, App::config()->defaultTplset()]));
+        }
         self::serveDocument($tpl, $mime);
     }
 
@@ -78,10 +83,10 @@ class FrontendUrl extends Url
 
         // Looking for a new template (private.html)
         $tplset = App::themes()->moduleInfo(App::blog()->settings()->system->theme, 'tplset');
-        if (!empty($tplset) && is_dir(__DIR__ . '/../' . Utility::TPL_ROOT . '/' . $tplset)) {
-            App::frontend()->template()->setPath(App::frontend()->template()->getPath(), My::path() . '/' . Utility::TPL_ROOT . '/' . $tplset);
+        if (!empty($tplset) && is_dir(implode(DIRECTORY_SEPARATOR, [My::path(), Utility::TPL_ROOT, $tplset]))) {
+            App::frontend()->template()->appendPath(implode(DIRECTORY_SEPARATOR, [My::path(), Utility::TPL_ROOT, $tplset]));
         } else {
-            App::frontend()->template()->setPath(App::frontend()->template()->getPath(), My::path() . '/' . Utility::TPL_ROOT . '/' . App::config()->defaultTplset());
+            App::frontend()->template()->appendPath(implode(DIRECTORY_SEPARATOR, [My::path(), Utility::TPL_ROOT, App::config()->defaultTplset()]));
         }
 
         // Load password from configuration
