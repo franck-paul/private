@@ -14,7 +14,7 @@ $this->registerModule(
     'PrivateMode',
     'Protect your blog with a password',
     'Osku and contributors',
-    '4.0.1',
+    '5.0',
     [
         'requires'    => [['core', '2.28']],
         'permissions' => 'My',
