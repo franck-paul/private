@@ -60,8 +60,8 @@ class Manage extends Process
                     My::redirect();
                 }
 
-                $private_flag         = (empty($_POST['private_flag'])) ? false : true;
-                $private_conauto_flag = (empty($_POST['private_conauto_flag'])) ? false : true;
+                $private_flag         = !empty($_POST['private_flag']);
+                $private_conauto_flag = !empty($_POST['private_conauto_flag']);
                 $message              = $_POST['private_page_message'];
                 $redirect_url         = $_POST['redirect_url'];
 
@@ -145,6 +145,7 @@ class Manage extends Process
         if (is_array($rte_flags) && in_array('private', $rte_flags)) {
             $rte_flag = $rte_flags['private'];
         }
+
         if ($rte_flag) {
             $head .= App::behavior()->callBehavior(
                 'adminPostEditor',

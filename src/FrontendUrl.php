@@ -63,16 +63,17 @@ class FrontendUrl extends Url
         $settings = My::settings();
 
         // New temporary UrlHandlers
-        $urlp       = new UrlHandler();
-        $urlp->mode = App::url()->mode;
-        $urlp->registerDefault(function () {});
+        $urlp = new UrlHandler(App::url()->getMode());
+        $urlp->registerDefault(static function () {
+        });
         foreach (App::url()->getTypes() as $k => $v) {
-            $urlp->register($k, $v['url'], $v['representation'], function () {});
+            $urlp->register($k, $v['url'], $v['representation'], static function () {
+            });
         }
 
         // Find type
         $urlp->getDocument();
-        $type = $urlp->type;
+        $type = $urlp->getType();
         unset($urlp);
 
         // Looking for a new template (private.html)
@@ -106,14 +107,11 @@ class FrontendUrl extends Url
         if (in_array($type, (array) $allowed_types)) {
             return '';
         }
+
         #Add cookie test (automatic login)
         $cookiepass = 'dc_privateblog_cookie_' . App::blog()->id();
 
-        if (!empty($_COOKIE[$cookiepass])) {
-            $cookiepassvalue = (($_COOKIE[$cookiepass]) == $password);
-        } else {
-            $cookiepassvalue = false;
-        }
+        $cookiepassvalue = empty($_COOKIE[$cookiepass]) ? false : ($_COOKIE[$cookiepass]) == $password;
 
         #Let's rumble session, cookies & conf :)
         if (!isset($_SESSION['sess_blog_private']) || $_SESSION['sess_blog_private'] == '') {
@@ -133,8 +131,10 @@ class FrontendUrl extends Url
 
                     return '';
                 }
+
                 App::frontend()->context()->form_error = __('Wrong password');
             }
+
             $session->destroy();
             self::serveDocument('private.html', 'text/html', false);
             # --BEHAVIOR-- publicAfterDocument

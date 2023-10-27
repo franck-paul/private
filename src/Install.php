@@ -39,8 +39,8 @@ class Install extends Process
             $settings->put('private_conauto_flag', false, App::blogWorkspace()::NS_BOOL, 'Private mode automatic connection option', false, true);
             $settings->put('message', __('<h2>Private blog</h2><p class="message">You need the password to view this blog.</p>'), App::blogWorkspace()::NS_STRING, 'Private mode public welcome message', false, true);
             $settings->put('redirect_url', '', App::blogWorkspace()::NS_STRING, 'Private mode redirect URL after disconnection', false, true);
-        } catch (Exception $e) {
-            App::error()->add($e->getMessage());
+        } catch (Exception $exception) {
+            App::error()->add($exception->getMessage());
         }
 
         return true;
