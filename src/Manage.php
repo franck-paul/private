@@ -111,7 +111,7 @@ class Manage extends Process
         $new_feeds            = '';
         $admin_post_behavior  = '';
 
-        $img       = '<img alt="%1$s" title="%1$s" src="%2$s" class="private-state" />';
+        $img       = '<img alt="%1$s" title="%1$s" src="%2$s" class="private-state">';
         $img_title = ($private_flag) ? sprintf($img, __('Protected'), Page::getPF(My::id() . '/icon-alt.svg')) : sprintf($img, __('Non protected'), Page::getPF(My::id() . '/icon.svg'));
 
         if ($settings->blog_private_pwd === null) {
@@ -221,7 +221,7 @@ class Manage extends Process
                 (new Para())->items([
                     (new Submit(['saveconfig']))
                         ->value(__('Save')),
-                    ... My::hiddenFields(),
+                    ...My::hiddenFields(),
                 ]),
             ])
         ->render();

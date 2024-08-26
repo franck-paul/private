@@ -29,7 +29,7 @@ class FrontendTemplate
     {
         $f = App::frontend()->template()->getFilters($attr);
 
-        return '<?php echo ' . sprintf($f, 'App::blog()->settings()->' . My::id() . '->message') . '; ?>';
+        return '<?= ' . sprintf($f, 'App::blog()->settings()->' . My::id() . '->message') . ' ?>';
     }
 
     /**
@@ -37,8 +37,6 @@ class FrontendTemplate
      */
     public static function PrivateReqPage(): string
     {
-        return '<?php echo(isset($_SERVER[\'REQUEST_URI\'])
-            ? ' . Html::class . '::escapeHTML($_SERVER[\'REQUEST_URI\'])
-            : App::blog()->url()); ?>';
+        return '<?= (isset($_SERVER[\'REQUEST_URI\']) ? ' . Html::class . '::escapeHTML($_SERVER[\'REQUEST_URI\']) : App::blog()->url()) ?>';
     }
 }

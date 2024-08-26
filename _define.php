@@ -23,6 +23,6 @@ $this->registerModule(
 
         'details'    => 'https://open-time.net/?q=private',
         'support'    => 'https://github.com/franck-paul/private',
-        'repository' => 'https://raw.githubusercontent.com/franck-paul/private/master/dcstore.xml',
+        'repository' => 'https://raw.githubusercontent.com/franck-paul/private/main/dcstore.xml',
     ]
 );
