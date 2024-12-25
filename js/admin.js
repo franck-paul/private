@@ -1,7 +1,7 @@
 /*global $, jsToolBar, dotclear */
 'use strict';
 
-$(() => {
+dotclear.ready(() => {
   // Password strength
   const opts = dotclear.getData('pwstrength');
   dotclear.passwordStrength(opts);

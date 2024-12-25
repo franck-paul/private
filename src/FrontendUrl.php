@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @brief private, a plugin for Dotclear 2
  *
@@ -122,11 +123,14 @@ class FrontendUrl extends Url
             }
 
             if (!empty($_POST['private_pass'])) {
-                if (md5($_POST['private_pass']) == $password) {
-                    $_SESSION['sess_blog_private'] = md5($_POST['private_pass']);
+                if (md5((string) $_POST['private_pass']) == $password) {
+                    $_SESSION['sess_blog_private'] = md5((string) $_POST['private_pass']);
 
                     if (!empty($_POST['pass_remember'])) {
-                        setcookie($cookiepass, md5($_POST['private_pass']), ['expires' => time() + 31_536_000, 'path' => '/']);
+                        setcookie($cookiepass, md5((string) $_POST['private_pass']), [
+                            'expires' => time() + 31_536_000,
+                            'path'    => '/',
+                        ]);
                     }
 
                     return '';

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @brief private, a plugin for Dotclear 2
  *
@@ -74,7 +75,7 @@ class Manage extends Process
                     if ($_POST['blog_private_pwd'] != $_POST['blog_private_pwd_c']) {
                         App::error()->add(__("Passwords don't match"));
                     } else {
-                        $blog_private_pwd = md5($_POST['blog_private_pwd']);
+                        $blog_private_pwd = md5((string) $_POST['blog_private_pwd']);
                         $settings->put('blog_private_pwd', $blog_private_pwd, App::blogWorkspace()::NS_STRING, 'Private blog password');
                     }
                 }
