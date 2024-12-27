@@ -65,11 +65,9 @@ class FrontendUrl extends Url
 
         // New temporary UrlHandlers
         $urlp = new UrlHandler(App::url()->getMode());
-        $urlp->registerDefault(static function () {
-        });
+        $urlp->registerDefault(static function (): void {});
         foreach (App::url()->getTypes() as $k => $v) {
-            $urlp->register($k, $v['url'], $v['representation'], static function () {
-            });
+            $urlp->register($k, $v['url'], $v['representation'], static function (): void {});
         }
 
         // Find type

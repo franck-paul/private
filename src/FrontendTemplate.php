@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @brief private, a plugin for Dotclear 2
  *
@@ -22,8 +23,6 @@ class FrontendTemplate
 {
     /**
      * @param      array<string, mixed>|\ArrayObject<string, mixed>  $attr      The attribute
-     *
-     * @return     string
      */
     public static function PrivateMsg(array|ArrayObject $attr): string
     {
@@ -32,9 +31,6 @@ class FrontendTemplate
         return '<?= ' . sprintf($f, 'App::blog()->settings()->' . My::id() . '->message') . ' ?>';
     }
 
-    /**
-     * @return     string
-     */
     public static function PrivateReqPage(): string
     {
         return '<?= (isset($_SERVER[\'REQUEST_URI\']) ? ' . Html::class . '::escapeHTML($_SERVER[\'REQUEST_URI\']) : App::blog()->url()) ?>';

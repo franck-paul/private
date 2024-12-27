@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @brief private, a plugin for Dotclear 2
  *
@@ -20,8 +21,6 @@ class BackendBehaviors
 {
     /**
      * @param      ArrayObject<string, mixed>  $rte
-     *
-     * @return     string
      */
     public static function adminRteFlags(ArrayObject $rte): string
     {
