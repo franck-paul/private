@@ -22,13 +22,19 @@ use Dotclear\Core\Process;
 use Dotclear\Helper\Html\Form\Checkbox;
 use Dotclear\Helper\Html\Form\Fieldset;
 use Dotclear\Helper\Html\Form\Form;
+use Dotclear\Helper\Html\Form\Img;
 use Dotclear\Helper\Html\Form\Label;
 use Dotclear\Helper\Html\Form\Legend;
+use Dotclear\Helper\Html\Form\Li;
+use Dotclear\Helper\Html\Form\Link;
+use Dotclear\Helper\Html\Form\None;
+use Dotclear\Helper\Html\Form\Note;
 use Dotclear\Helper\Html\Form\Para;
 use Dotclear\Helper\Html\Form\Password;
+use Dotclear\Helper\Html\Form\Set;
 use Dotclear\Helper\Html\Form\Submit;
-use Dotclear\Helper\Html\Form\Text;
 use Dotclear\Helper\Html\Form\Textarea;
+use Dotclear\Helper\Html\Form\Ul;
 use Dotclear\Helper\Html\Form\Url;
 use Dotclear\Helper\Html\Html;
 use Exception;
@@ -109,23 +115,48 @@ class Manage extends Process
         $feed                 = App::blog()->url() . App::url()->getURLFor('feed', 'atom');
         $comments_feed        = App::blog()->url() . App::url()->getURLFor('feed', 'atom/comments');
         $redirect_url         = $settings->redirect_url;
-        $new_feeds            = '';
+        $new_feeds            = (new None());
         $admin_post_behavior  = '';
 
-        $img       = '<img alt="%1$s" title="%1$s" src="%2$s" class="private-state">';
-        $img_title = ($private_flag) ? sprintf($img, __('Protected'), Page::getPF(My::id() . '/icon-alt.svg')) : sprintf($img, __('Non protected'), Page::getPF(My::id() . '/icon.svg'));
+        $img_title = (new Img($private_flag ? Page::getPF(My::id() . '/icon-alt.svg') : Page::getPF(My::id() . '/icon.svg')))
+            ->alt($private_flag ? __('Protected') : __('Non protected'))
+            ->title($private_flag ? __('Protected') : __('Non protected'))
+            ->class('private-state')
+        ->render();
 
         if ($settings->blog_private_pwd === null) {
             Notices::addWarningNotice(__('No password set.'));
         }
 
         if ($settings->private_flag === true) {
-            $new_feeds = '<h3 class="vertical-separator pretty-title">' . __('Syndication') . '</h3>' . "\n" .
-            '<p class="warning">' . __('Feeds have changed, new are displayed below.') . '</p>' . "\n" .
-            '<ul class="nice">' . "\n" .
-            '<li class="feed"><a href="' . $feed . '">' . __('Entries feed') . '</a></li>' . "\n" .
-            '<li class="feed"><a href="' . $comments_feed . '">' . __('Comments feed') . '</a></li>' . "\n" .
-            '</ul>' . "\n";
+            $new_feeds = (new Set())
+                ->items([
+                    (new Fieldset())
+                        ->legend(new Legend(__('Syndication')))
+                        ->fields([
+                            (new Note())
+                                ->class('warning')
+                                ->text(__('Feeds have changed, new are displayed below.')),
+                            (new Ul())
+                                ->class('nice')
+                                ->items([
+                                    (new Li())
+                                        ->class('feed')
+                                        ->items([
+                                            (new Link())
+                                                ->href($feed)
+                                                ->text(__('Entries feed')),
+                                        ]),
+                                    (new Li())
+                                        ->class('feed')
+                                        ->items([
+                                            (new Link())
+                                                ->href($comments_feed)
+                                                ->text(__('Comments feed')),
+                                        ]),
+                                ]),
+                        ]),
+                ]);
         }
 
         $head = $admin_post_behavior .
@@ -217,8 +248,8 @@ class Manage extends Process
                             ->maxlength(255)
                             ->label((new Label(__('Redirect URL after disconnection:'), Label::OUTSIDE_LABEL_BEFORE))),
                         ]),
-                        (new Text(null, $new_feeds)),
                     ]),
+                $new_feeds,
                 (new Para())->items([
                     (new Submit(['saveconfig']))
                         ->value(__('Save')),
