@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @brief private, a plugin for Dotclear 2
  *

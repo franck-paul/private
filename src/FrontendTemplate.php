@@ -16,8 +16,7 @@ declare(strict_types=1);
 namespace Dotclear\Plugin\private;
 
 use ArrayObject;
-use Dotclear\App;
-use Dotclear\Helper\Html\Html;
+use Dotclear\Plugin\TemplateHelper\Code;
 
 class FrontendTemplate
 {
@@ -26,13 +25,23 @@ class FrontendTemplate
      */
     public static function PrivateMsg(array|ArrayObject $attr): string
     {
-        $f = App::frontend()->template()->getFilters($attr);
-
-        return '<?= ' . sprintf($f, 'App::blog()->settings()->' . My::id() . '->message') . ' ?>';
+        return Code::getPHPTemplateValueCode(
+            FrontendTemplateCode::PrivateMsg(...),
+            [
+                (string) My::settings()->message,
+            ],
+            attr: $attr,
+        );
     }
 
-    public static function PrivateReqPage(): string
+    /**
+     * @param      array<string, mixed>|\ArrayObject<string, mixed>  $attr      The attribute
+     */
+    public static function PrivateReqPage(array|ArrayObject $attr): string
     {
-        return '<?= (isset($_SERVER[\'REQUEST_URI\']) ? ' . Html::class . '::escapeHTML($_SERVER[\'REQUEST_URI\']) : App::blog()->url()) ?>';
+        return Code::getPHPTemplateValueCode(
+            FrontendTemplateCode::PrivateReqPage(...),
+            attr: $attr,
+        );
     }
 }

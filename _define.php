@@ -17,8 +17,11 @@ $this->registerModule(
     'Osku and contributors',
     '5.4',
     [
-        'date'        => '2025-02-21T11:58:53+0100',
-        'requires'    => [['core', '2.28']],
+        'date'     => '2025-02-21T11:58:53+0100',
+        'requires' => [
+            ['core', '2.34'],
+            ['TemplateHelper'],
+        ],
         'permissions' => 'My',
         'priority'    => 1501,
         'type'        => 'plugin',
@@ -26,5 +29,6 @@ $this->registerModule(
         'details'    => 'https://open-time.net/?q=private',
         'support'    => 'https://github.com/franck-paul/private',
         'repository' => 'https://raw.githubusercontent.com/franck-paul/private/main/dcstore.xml',
+        'license'    => 'gpl2',
     ]
 );
