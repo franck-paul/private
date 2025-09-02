@@ -19,7 +19,6 @@ use ArrayObject;
 use Dotclear\App;
 use Dotclear\Core\Frontend\Ctx;
 use Dotclear\Core\Frontend\Url;
-use Dotclear\Database\Session;
 use Dotclear\Helper\Network\Http;
 use Dotclear\Helper\Network\UrlHandler;
 
@@ -91,68 +90,26 @@ class FrontendUrl extends Url
         );
         App::behavior()->callBehavior('initPrivateMode', $allowed_types);
 
-        #Generic behavior
+        // Generic behavior
         App::behavior()->callBehavior('initPrivateHandler');
-
-        #Let's go : define a new session and start it
-        $session = new Session(
-            App::con(),
-            App::con()->prefix() . App::session()::SESSION_TABLE_NAME,
-            'dc_privateblog_sess_' . App::blog()->id(),
-            '/'
-        );
-        $session->start();
 
         if (in_array($type, (array) $allowed_types)) {
             return '';
         }
 
-        #Add cookie test (automatic login)
-        $cookiepass = 'dc_privateblog_cookie_' . App::blog()->id();
+        // Add cookie test (automatic login)
+        $cookiepass      = 'dc_privateblog_cookie_' . App::blog()->id();
+        $cookiepassvalue = empty($_COOKIE[$cookiepass]) ? false : ($_COOKIE[$cookiepass]) === $password;
 
-        $cookiepassvalue = empty($_COOKIE[$cookiepass]) ? false : ($_COOKIE[$cookiepass]) == $password;
-
-        #Let's rumble session, cookies & conf :)
-        if (!isset($_SESSION['sess_blog_private']) || $_SESSION['sess_blog_private'] == '') {
-            if ($cookiepassvalue) {
-                $_SESSION['sess_blog_private'] = $_COOKIE[$cookiepass];
-
-                return '';
-            }
-
-            if (!empty($_POST['private_pass'])) {
-                if (md5((string) $_POST['private_pass']) == $password) {
-                    $_SESSION['sess_blog_private'] = md5((string) $_POST['private_pass']);
-
-                    if (!empty($_POST['pass_remember'])) {
-                        setcookie($cookiepass, md5((string) $_POST['private_pass']), [
-                            'expires' => time() + 31_536_000,
-                            'path'    => '/',
-                        ]);
-                    }
-
-                    return '';
-                }
-
-                App::frontend()->context()->form_error = __('Wrong password');
-            }
-
-            $session->destroy();
-            self::serveDocument('private.html', 'text/html', false);
-            # --BEHAVIOR-- publicAfterDocument
-            App::behavior()->callBehavior('publicAfterDocumentV2');
-            exit;
-        } elseif ($_SESSION['sess_blog_private'] != $password) {
-            $session->destroy();
-            self::serveDocument('private.html', 'text/html', false);
-            # --BEHAVIOR-- publicAfterDocument
-            App::behavior()->callBehavior('publicAfterDocumentV2');
-            exit;
-        } elseif (isset($_POST['blogout'])) {
-            $session->destroy();
-            setcookie($cookiepass, 'ciao', ['expires' => time() - 86400, 'path' => '/']);
+        if (isset($_POST['blogout'])) {
+            App::session()->destroy();
+            setcookie(
+                $cookiepass,
+                'ciao',
+                ['expires' => time() - 86_400, 'path' => '/'],
+            );
             // Redirection ??
-            if ($settings->redirect_url != '') {
+            if ($settings->redirect_url !== '') {
                 Http::redirect($settings->redirect_url);
             } else {
                 App::frontend()->context()->form_error = __('You are now disconnected.');
@@ -161,6 +118,45 @@ class FrontendUrl extends Url
                 App::behavior()->callBehavior('publicAfterDocumentV2');
                 exit;
             }
+        }
+
+        // Let's rumble session, cookies & conf :)
+        if (!isset($_SESSION['sess_blog_private']) || $_SESSION['sess_blog_private'] == '') {
+            if ($cookiepassvalue) {
+                $_SESSION['sess_blog_private'] = $_COOKIE[$cookiepass];
+
+                return '';
+            }
+
+            if (!empty($_POST['private_pass'])) {
+                if (md5((string) $_POST['private_pass']) === $password) {
+                    $_SESSION['sess_blog_private'] = md5((string) $_POST['private_pass']);
+
+                    if (!empty($_POST['pass_remember'])) {
+                        setcookie(
+                            $cookiepass,
+                            md5((string) $_POST['private_pass']),
+                            ['expires' => time() + 31_536_000, 'path' => '/'],
+                        );
+                    }
+
+                    return '';
+                }
+
+                App::frontend()->context()->form_error = __('Wrong password');
+            }
+
+            App::session()->destroy();
+            self::serveDocument('private.html', 'text/html', false);
+            # --BEHAVIOR-- publicAfterDocument
+            App::behavior()->callBehavior('publicAfterDocumentV2');
+            exit;
+        } elseif ($_SESSION['sess_blog_private'] !== $password) {
+            App::session()->destroy();
+            self::serveDocument('private.html', 'text/html', false);
+            # --BEHAVIOR-- publicAfterDocument
+            App::behavior()->callBehavior('publicAfterDocumentV2');
+            exit;
         }
 
         return '';

@@ -50,7 +50,7 @@ class FrontendWidgets
                             (new Para())
                                 ->class('buttons')
                                 ->items([
-                                    (new Hidden('blogout', '')),
+                                    (new Hidden('blogout', '1')),
                                     (new Submit('submit_blogout', Html::escapeHTML((string) $w->get('label'))))
                                         ->class('logout'),
                                 ]),
