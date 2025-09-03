@@ -98,16 +98,10 @@ class FrontendUrl extends Url
         }
 
         // Add cookie test (automatic login)
-        $cookiepass      = 'dc_privateblog_cookie_' . App::blog()->id();
-        $cookiepassvalue = empty($_COOKIE[$cookiepass]) ? false : ($_COOKIE[$cookiepass]) === $password;
+        $cookiepass = 'dc_private_blog_' . App::blog()->id();
 
         if (isset($_POST['blogout'])) {
             App::session()->destroy();
-            setcookie(
-                $cookiepass,
-                'ciao',
-                ['expires' => time() - 86_400, 'path' => '/'],
-            );
             // Redirection ??
             if ($settings->redirect_url !== '') {
                 Http::redirect($settings->redirect_url);
@@ -121,23 +115,19 @@ class FrontendUrl extends Url
         }
 
         // Let's rumble session, cookies & conf :)
-        if (!isset($_SESSION['sess_blog_private']) || $_SESSION['sess_blog_private'] == '') {
-            if ($cookiepassvalue) {
-                $_SESSION['sess_blog_private'] = $_COOKIE[$cookiepass];
+        if (App::session()->get('dc_private_blog') == '') {
+            if (App::session()->get($cookiepass) == $password) {
+                App::session()->set('dc_private_blog', $password);
 
                 return '';
             }
 
             if (!empty($_POST['private_pass'])) {
                 if (md5((string) $_POST['private_pass']) === $password) {
-                    $_SESSION['sess_blog_private'] = md5((string) $_POST['private_pass']);
+                    App::session()->set('dc_private_blog', md5((string) $_POST['private_pass']));
 
                     if (!empty($_POST['pass_remember'])) {
-                        setcookie(
-                            $cookiepass,
-                            md5((string) $_POST['private_pass']),
-                            ['expires' => time() + 31_536_000, 'path' => '/'],
-                        );
+                        App::session()->set($cookiepass, $password);
                     }
 
                     return '';
@@ -151,7 +141,7 @@ class FrontendUrl extends Url
             # --BEHAVIOR-- publicAfterDocument
             App::behavior()->callBehavior('publicAfterDocumentV2');
             exit;
-        } elseif ($_SESSION['sess_blog_private'] !== $password) {
+        } elseif (App::session()->get('dc_private_blog') != $password) {
             App::session()->destroy();
             self::serveDocument('private.html', 'text/html', false);
             # --BEHAVIOR-- publicAfterDocument
