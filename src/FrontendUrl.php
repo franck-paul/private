@@ -114,7 +114,7 @@ class FrontendUrl extends Url
         // Let's rumble session, cookies & conf :)
         if (App::session()->get('dc_private_blog') == '') {
             // Is any cookie with correct password?
-            $cookiepassvalue = isset($_COOKIE[$cookiepass]) && ($_COOKIE[$cookiepass] === $password);
+            $cookiepassvalue = isset($_COOKIE[$cookiepass]) && password_verify((string) $_COOKIE[$cookiepass], (string) $password);
             if ($cookiepassvalue) {
                 // Restor cookie in session and everything if fine
                 App::session()->set('dc_private_blog', $_COOKIE[$cookiepass]);
@@ -123,15 +123,15 @@ class FrontendUrl extends Url
             }
 
             if (!empty($_POST['private_pass'])) {
-                if (md5((string) $_POST['private_pass']) === $password) {
-                    // The given password is ok, store it in session (as md5)
-                    App::session()->set('dc_private_blog', md5((string) $_POST['private_pass']));
+                if (password_verify((string) $_POST['private_pass'], (string) $password)) {
+                    // The given password is ok, store it in session
+                    App::session()->set('dc_private_blog', App::auth()->crypt((string) $_POST['private_pass']));
 
                     if (!empty($_POST['pass_remember'])) {
-                        // Auto-login is requested, create a cookie with the given password (as md5)
+                        // Auto-login is requested, create a cookie with the given password
                         setcookie(
                             $cookiepass,
-                            md5((string) $_POST['private_pass']),
+                            (string) App::auth()->crypt((string) $_POST['private_pass']),
                             ['expires' => time() + 31_536_000, 'path' => '/'],
                         );
                     }
