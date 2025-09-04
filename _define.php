@@ -15,9 +15,9 @@ $this->registerModule(
     'PrivateMode',
     'Protect your blog with a password',
     'Osku and contributors',
-    '7.1',
+    '7.2',
     [
-        'date'     => '2025-09-03T10:22:12+0200',
+        'date'     => '2025-09-04T08:58:14+0200',
         'requires' => [
             ['core', '2.36'],
             ['TemplateHelper'],
