@@ -52,7 +52,7 @@ class FrontendWidgets
                                 ->items([
                                     (new Hidden('blogout', '1')),
                                     (new Submit('submit_blogout', Html::escapeHTML((string) $w->get('label'))))
-                                        ->class('logout'),
+                                        ->class(['logout', 'submit']),
                                 ]),
                         ]),
                 ])

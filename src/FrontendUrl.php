@@ -62,17 +62,17 @@ class FrontendUrl extends Url
     {
         $settings = My::settings();
 
-        // New temporary UrlHandlers
-        $urlp = new UrlHandler(App::url()->getMode());
-        $urlp->registerDefault(static function (): void {});
+        // New temporary Url handler wich void any known URL
+        $url_handler = new UrlHandler(App::url()->getMode());
+        $url_handler->registerDefault(static function (): void {});
         foreach (App::url()->getTypes() as $k => $v) {
-            $urlp->register($k, $v['url'], $v['representation'], static function (): void {});
+            $url_handler->register($k, $v['url'], $v['representation'], static function (): void {});
         }
 
         // Find type
-        $urlp->getDocument();
-        $type = $urlp->getType();
-        unset($urlp);
+        $url_handler->getDocument();
+        $type = $url_handler->getType();
+        unset($url_handler);
 
         // Looking for a new template (private.html)
         App::frontend()->template()->appendPath(My::tplPath());
@@ -81,13 +81,7 @@ class FrontendUrl extends Url
         $password = $settings->blog_private_pwd;
 
         // Define allowed url->type
-        $allowed_types = new ArrayObject(
-            [
-                'feed', 'xslt', 'tag_feed', 'pubfeed', 'spamfeed',
-                'hamfeed', 'trackback', 'preview', 'pagespreview', 'contactme',
-                'xmlrpc', 'try',
-            ]
-        );
+        $allowed_types = new ArrayObject(['feed', 'xslt', 'tag_feed', 'pubfeed', 'spamfeed', 'hamfeed', 'trackback', 'preview', 'pagespreview', 'contactme', 'xmlrpc', 'try']);
         App::behavior()->callBehavior('initPrivateMode', $allowed_types);
 
         // Generic behavior
@@ -98,57 +92,79 @@ class FrontendUrl extends Url
         }
 
         // Add cookie test (automatic login)
-        $cookiepass = 'dc_private_blog_' . App::blog()->id();
+        $cookiepass = 'dc_privateblog_cookie_' . App::blog()->id();
 
         if (isset($_POST['blogout'])) {
+            // Disconnect from private blog
             App::session()->destroy();
-            // Redirection ??
+            setcookie(
+                $cookiepass,
+                'ciao',
+                ['expires' => time() - 86_400, 'path' => '/'],
+            );
+            // Redirection if set or back to password form
             if ($settings->redirect_url !== '') {
                 Http::redirect($settings->redirect_url);
             } else {
                 App::frontend()->context()->form_error = __('You are now disconnected.');
-                self::serveDocument('private.html', 'text/html', false);
-                # --BEHAVIOR-- publicAfterDocument
-                App::behavior()->callBehavior('publicAfterDocumentV2');
-                exit;
+                self::redirectToPasswordForm(false);
             }
         }
 
         // Let's rumble session, cookies & conf :)
         if (App::session()->get('dc_private_blog') == '') {
-            if (App::session()->get($cookiepass) == $password) {
-                App::session()->set('dc_private_blog', $password);
+            // Is any cookie with correct password?
+            $cookiepassvalue = isset($_COOKIE[$cookiepass]) && ($_COOKIE[$cookiepass] === $password);
+            if ($cookiepassvalue) {
+                // Restor cookie in session and everything if fine
+                App::session()->set('dc_private_blog', $_COOKIE[$cookiepass]);
 
                 return '';
             }
 
             if (!empty($_POST['private_pass'])) {
                 if (md5((string) $_POST['private_pass']) === $password) {
+                    // The given password is ok, store it in session (as md5)
                     App::session()->set('dc_private_blog', md5((string) $_POST['private_pass']));
 
                     if (!empty($_POST['pass_remember'])) {
-                        App::session()->set($cookiepass, $password);
+                        // Auto-login is requested, create a cookie with the given password (as md5)
+                        setcookie(
+                            $cookiepass,
+                            md5((string) $_POST['private_pass']),
+                            ['expires' => time() + 31_536_000, 'path' => '/'],
+                        );
                     }
 
+                    // Everything is fine
                     return '';
                 }
 
                 App::frontend()->context()->form_error = __('Wrong password');
             }
 
-            App::session()->destroy();
-            self::serveDocument('private.html', 'text/html', false);
-            # --BEHAVIOR-- publicAfterDocument
-            App::behavior()->callBehavior('publicAfterDocumentV2');
-            exit;
+            // Password given is empty or incorrect, back to the password form
+            self::redirectToPasswordForm();
         } elseif (App::session()->get('dc_private_blog') != $password) {
-            App::session()->destroy();
-            self::serveDocument('private.html', 'text/html', false);
-            # --BEHAVIOR-- publicAfterDocument
-            App::behavior()->callBehavior('publicAfterDocumentV2');
-            exit;
+            // A session exists but without the correct password, back to the password form
+            self::redirectToPasswordForm();
         }
 
+        // Everything is fine
         return '';
+    }
+
+    /**
+     * Destroy the session if requested and redirect to password form
+     */
+    protected static function redirectToPasswordForm(bool $destroy_session = true): never
+    {
+        if ($destroy_session) {
+            App::session()->destroy();
+        }
+        self::serveDocument('private.html', 'text/html', false);
+        # --BEHAVIOR-- publicAfterDocument
+        App::behavior()->callBehavior('publicAfterDocumentV2');
+        exit;
     }
 }

@@ -7,30 +7,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{tpl:lang Restricted area}} - {{tpl:BlogName encode_html="1"}}</title>
   <style type="text/css">
+  html {
+    color-scheme: light dark;
+  }
   :root {
-    --color-text: #000;
-    --color-background: #eee;
-    --color-form-background: #fff;
-    --color-form-border: #a2cbe9;
-    --color-title: #d30e60;
-  }
-
-  @media (prefers-color-scheme: light) {
-    :root {
-      --color-text: #000;
-      --color-background: #eee;
-      --color-form-background: #fff;
-      --color-title: #d30e60;
-    }
-  }
-
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --color-text: #fff;
-      --color-background: #595b5d;
-      --color-form-background: #272b30;
-      --color-title: #f783b3;
-    }
+    --color-text: light-dark(#000, #fff);
+    --color-background: light-dark(#eee, #595b5d);
+    --color-form-background: light-dark(#fff, #272b30);
+    --color-form-border: light-dark(#a2cbe9, #a2cbe9);
+    --color-title: light-dark(#d30e60, #f783b3);
   }
 
   body {
@@ -105,7 +90,7 @@
         <label for="private_pass">{{tpl:lang Password:}}
           <input type="password" name="private_pass" id="private_pass" value="">
         </label>
-        <input type="submit" value="ok" title="{{tpl:lang Access to blog}}">
+        <input type="submit" class="submit" value="ok" title="{{tpl:lang Access to blog}}">
       </p>
     </div>
   </form>
