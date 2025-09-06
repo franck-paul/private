@@ -18,7 +18,7 @@ namespace Dotclear\Plugin\private;
 use ArrayObject;
 use Dotclear\App;
 use Dotclear\Core\Frontend\Ctx;
-use Dotclear\Core\Frontend\Url;
+use Dotclear\Core\Url;
 use Dotclear\Helper\Network\Http;
 use Dotclear\Helper\Network\UrlHandler;
 
