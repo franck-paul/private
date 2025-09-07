@@ -18,7 +18,6 @@ namespace Dotclear\Plugin\private;
 use Dotclear\App;
 use Dotclear\Core\Backend\Notices;
 use Dotclear\Core\Backend\Page;
-use Dotclear\Core\Process;
 use Dotclear\Helper\Html\Form\Checkbox;
 use Dotclear\Helper\Html\Form\Fieldset;
 use Dotclear\Helper\Html\Form\Form;
@@ -37,10 +36,13 @@ use Dotclear\Helper\Html\Form\Textarea;
 use Dotclear\Helper\Html\Form\Ul;
 use Dotclear\Helper\Html\Form\Url;
 use Dotclear\Helper\Html\Html;
+use Dotclear\Helper\Process\TraitProcess;
 use Exception;
 
-class Manage extends Process
+class Manage
 {
+    use TraitProcess;
+
     /**
      * Initializes the page.
      */
