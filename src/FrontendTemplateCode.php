@@ -29,7 +29,7 @@ class FrontendTemplateCode
         array $_params_,
         string $_tag_,
     ): void {
-        echo \Dotclear\Core\Frontend\Ctx::global_filters(
+        echo App::frontend()->context()::global_filters(
             $_message_,
             $_params_,
             $_tag_
