@@ -81,7 +81,7 @@ class FrontendUrl extends Url
         $password = $settings->blog_private_pwd;
 
         // Define allowed url->type
-        $allowed_types = new ArrayObject(['feed', 'xslt', 'tag_feed', 'pubfeed', 'spamfeed', 'hamfeed', 'trackback', 'preview', 'pagespreview', 'contactme', 'xmlrpc', 'try']);
+        $allowed_types = new ArrayObject(['feed', 'xslt', 'tag_feed', 'pubfeed', 'spamfeed', 'hamfeed', 'trackback', 'preview', 'pagespreview', 'contactme', 'xmlrpc']);
         App::behavior()->callBehavior('initPrivateMode', $allowed_types);
 
         // Generic behavior

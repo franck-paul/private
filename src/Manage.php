@@ -16,8 +16,6 @@ declare(strict_types=1);
 namespace Dotclear\Plugin\private;
 
 use Dotclear\App;
-use Dotclear\Core\Backend\Notices;
-use Dotclear\Core\Backend\Page;
 use Dotclear\Helper\Html\Form\Checkbox;
 use Dotclear\Helper\Html\Form\Fieldset;
 use Dotclear\Helper\Html\Form\Form;
@@ -65,7 +63,7 @@ class Manage
         if (!empty($_POST['saveconfig'])) {
             try {
                 if (!empty($_POST['private_flag']) && empty($_POST['blog_private_pwd']) && empty($settings->blog_private_pwd)) {
-                    Notices::addErrorNotice(__('No password set.'));
+                    App::backend()->notices()->addErrorNotice(__('No password set.'));
                     My::redirect();
                 }
 
@@ -89,7 +87,7 @@ class Manage
                 }
 
                 App::blog()->triggerBlog();
-                Notices::addSuccessNotice(__('Configuration successfully updated.'));
+                App::backend()->notices()->addSuccessNotice(__('Configuration successfully updated.'));
                 My::redirect();
             } catch (Exception $e) {
                 App::error()->add($e->getMessage());
@@ -120,14 +118,14 @@ class Manage
         $new_feeds            = (new None());
         $admin_post_behavior  = '';
 
-        $img_title = (new Img($private_flag ? Page::getPF(My::id() . '/icon-alt.svg') : Page::getPF(My::id() . '/icon.svg')))
+        $img_title = (new Img($private_flag ? App::backend()->page()->getPF(My::id() . '/icon-alt.svg') : App::backend()->page()->getPF(My::id() . '/icon.svg')))
             ->alt($private_flag ? __('Protected') : __('Non protected'))
             ->title($private_flag ? __('Protected') : __('Non protected'))
             ->class('private-state')
         ->render();
 
         if ($settings->blog_private_pwd === null) {
-            Notices::addWarningNotice(__('No password set.'));
+            App::backend()->notices()->addWarningNotice(__('No password set.'));
         }
 
         if ($settings->private_flag === true) {
@@ -162,14 +160,14 @@ class Manage
         }
 
         $head = $admin_post_behavior .
-            Page::jsLoad('js/jquery/jquery-ui.custom.js') .
-            Page::jsLoad('js/jquery/jquery.ui.touch-punch.js') .
-            Page::jsJson('pwstrength', [
+            App::backend()->page()->jsLoad('js/jquery/jquery-ui.custom.js') .
+            App::backend()->page()->jsLoad('js/jquery/jquery.ui.touch-punch.js') .
+            App::backend()->page()->jsJson('pwstrength', [
                 'min' => sprintf(__('Password strength: %s'), __('weak')),
                 'avg' => sprintf(__('Password strength: %s'), __('medium')),
                 'max' => sprintf(__('Password strength: %s'), __('strong')),
             ]) .
-            Page::jsLoad('js/pwstrength.js') .
+            App::backend()->page()->jsLoad('js/pwstrength.js') .
             My::cssLoad('admin.css') .
             My::jsLoad('admin.js');
 
@@ -190,15 +188,15 @@ class Manage
             );
         }
 
-        Page::openModule(My::name(), $head);
+        App::backend()->page()->openModule(My::name(), $head);
 
-        echo Page::breadcrumb(
+        echo App::backend()->page()->breadcrumb(
             [
                 Html::escapeHTML(App::blog()->name()) => '',
                 __('Private mode') . $img_title       => '',
             ]
         );
-        echo Notices::getNotices();
+        echo App::backend()->notices()->getNotices();
 
         // Form
         echo (new Form('private'))
@@ -260,8 +258,8 @@ class Manage
             ])
         ->render();
 
-        Page::helpBlock('privatemode');
+        App::backend()->page()->helpBlock('privatemode');
 
-        Page::closeModule();
+        App::backend()->page()->closeModule();
     }
 }
