@@ -96,7 +96,9 @@ class FrontendUrl extends Url
 
         if (isset($_POST['blogout'])) {
             // Disconnect from private blog
-            App::session()->destroy();
+            if (App::session()->exists()) {
+                App::session()->destroy();
+            }
             setcookie(
                 $cookiepass,
                 'ciao',
@@ -114,9 +116,9 @@ class FrontendUrl extends Url
         // Let's rumble session, cookies & conf :)
         if (App::session()->get('dc_private_blog') == '') {
             // Is any cookie with correct password?
-            $cookiepassvalue = isset($_COOKIE[$cookiepass]) && password_verify((string) $_COOKIE[$cookiepass], (string) $password);
+            $cookiepassvalue = isset($_COOKIE[$cookiepass]) && password_verify((string) $password, (string) $_COOKIE[$cookiepass]);
             if ($cookiepassvalue) {
-                // Restor cookie in session and everything if fine
+                // Restore cookie in session and everything if fine
                 App::session()->set('dc_private_blog', $_COOKIE[$cookiepass]);
 
                 return '';
@@ -131,7 +133,8 @@ class FrontendUrl extends Url
                         // Auto-login is requested, create a cookie with the given password
                         setcookie(
                             $cookiepass,
-                            (string) App::auth()->crypt((string) $_POST['private_pass']),
+                            //(string) App::auth()->crypt((string) $_POST['private_pass']),
+                            (string) App::auth()->crypt((string) $password),
                             ['expires' => time() + 31_536_000, 'path' => '/'],
                         );
                     }
@@ -145,7 +148,7 @@ class FrontendUrl extends Url
 
             // Password given is empty or incorrect, back to the password form
             self::redirectToPasswordForm();
-        } elseif (App::session()->get('dc_private_blog') != $password) {
+        } elseif (!password_verify((string) $password, (string) App::session()->get('dc_private_blog'))) {
             // A session exists but without the correct password, back to the password form
             self::redirectToPasswordForm();
         }
@@ -159,9 +162,10 @@ class FrontendUrl extends Url
      */
     protected static function redirectToPasswordForm(bool $destroy_session = true): never
     {
-        if ($destroy_session) {
+        if ($destroy_session && App::session()->exists()) {
             App::session()->destroy();
         }
+
         self::serveDocument('private.html', 'text/html', false);
         # --BEHAVIOR-- publicAfterDocument
         App::behavior()->callBehavior('publicAfterDocumentV2');
