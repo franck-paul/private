@@ -43,13 +43,13 @@ class Prepend
         if (App::blog()->isDefined() && $settings->private_flag) {
             $privatefeed = $settings->blog_private_pwd;
             // Obfuscate all feeds URL
-            foreach (App::url()->getTypes() as $k => $v) {
+            foreach (App::url()->getTypes() as $k => $type) {
                 if (in_array($k, (array) $feeds_url)) {
                     App::url()->register(
                         $k,
-                        sprintf('%s/%s', $privatefeed, $v['url']),
-                        sprintf('^%s/%s/(.+)$', $privatefeed, $v['url']),
-                        $v['handler']
+                        sprintf('%s/%s', $privatefeed, $type['url']),
+                        sprintf('^%s/%s/(.+)$', $privatefeed, $type['url']),
+                        $type['handler']
                     );
                 }
             }
