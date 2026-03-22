@@ -25,10 +25,12 @@ class FrontendTemplate
      */
     public static function PrivateMsg(array|ArrayObject $attr): string
     {
+        $message = is_string($message = My::settings()->message) ? $message : '';
+
         return Code::getPHPTemplateValueCode(
             FrontendTemplateCode::PrivateMsg(...),
             [
-                (string) My::settings()->message,
+                $message,
             ],
             attr: $attr,
         );

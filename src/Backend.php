@@ -16,6 +16,7 @@ declare(strict_types=1);
 namespace Dotclear\Plugin\private;
 
 use Dotclear\App;
+use Dotclear\Core\Backend\Menus;
 use Dotclear\Helper\Process\TraitProcess;
 
 class Backend
@@ -36,7 +37,7 @@ class Backend
             return false;
         }
 
-        My::addBackendMenuItem(App::backend()->menus()::MENU_BLOG);
+        My::addBackendMenuItem(Menus::MENU_BLOG);
 
         App::behavior()->addBehaviors([
             'adminRteFlagsV2' => BackendBehaviors::adminRteFlags(...),

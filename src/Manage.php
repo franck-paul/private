@@ -78,10 +78,12 @@ class Manage
                 $settings->put('redirect_url', $redirect_url, App::blogWorkspace()::NS_STRING, 'Private mode redirect URL after disconnection');
 
                 if (!empty($_POST['blog_private_pwd'])) {
-                    if ($_POST['blog_private_pwd'] != $_POST['blog_private_pwd_c']) {
+                    $blog_private_pwd      = is_string($blog_private_pwd = $_POST['blog_private_pwd']) ? $blog_private_pwd : '';
+                    $blog_private_pwd_copy = is_string($blog_private_pwd_copy = $_POST['blog_private_pwd']) ? $blog_private_pwd_copy : '';
+                    if ($blog_private_pwd !== $blog_private_pwd_copy) {
                         App::error()->add(__("Passwords don't match"));
-                    } else {
-                        $blog_private_pwd = App::auth()->crypt((string) $_POST['blog_private_pwd']);
+                    } elseif ($blog_private_pwd !== '') {
+                        $blog_private_pwd = App::auth()->crypt($blog_private_pwd);
                         $settings->put('blog_private_pwd', $blog_private_pwd, App::blogWorkspace()::NS_STRING, 'Private blog password');
                     }
                 }
@@ -111,12 +113,13 @@ class Manage
         // Getting current settings
         $private_flag         = (bool) $settings->private_flag;
         $private_conauto_flag = (bool) $settings->private_conauto_flag;
-        $message              = $settings->message;
+        $message              = is_string($message = $settings->message) ? $message : '';
         $feed                 = App::blog()->url() . App::url()->getURLFor('feed', 'atom');
         $comments_feed        = App::blog()->url() . App::url()->getURLFor('feed', 'atom/comments');
-        $redirect_url         = $settings->redirect_url;
+        $redirect_url         = is_string($redirect_url = $settings->redirect_url) ? $redirect_url : '';
         $new_feeds            = (new None());
         $admin_post_behavior  = '';
+        $user_lang            = is_string($user_lang = App::auth()->getInfo('user_lang')) ? $user_lang : 'en';
 
         $img_title = (new Img($private_flag ? App::backend()->page()->getPF(My::id() . '/icon-alt.svg') : App::backend()->page()->getPF(My::id() . '/icon.svg')))
             ->alt($private_flag ? __('Protected') : __('Non protected'))
@@ -179,9 +182,10 @@ class Manage
         }
 
         if ($rte_flag) {
+            $editor = is_array($rich_editor) && isset($rich_editor['xhtml']) && is_string($editor = $rich_editor['xhtml']) ? $editor : '';
             $head .= App::behavior()->callBehavior(
                 'adminPostEditor',
-                $rich_editor['xhtml'],
+                $editor,
                 'private_page_message',
                 ['#private_page_message'],
                 'xhtml'
@@ -232,7 +236,7 @@ class Manage
                             (new Textarea('private_page_message', Html::escapeHTML($message)))
                             ->cols(60)
                             ->rows(10)
-                            ->lang(App::auth()->getInfo('user_lang'))
+                            ->lang($user_lang)
                             ->spellcheck(true)
                             ->label((new Label(__('Message:'), Label::OUTSIDE_LABEL_BEFORE))),
                         ]),

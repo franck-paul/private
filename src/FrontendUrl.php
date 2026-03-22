@@ -53,7 +53,9 @@ class FrontendUrl extends Url
             $mime = 'application/atom+xml';
         }
 
-        header('X-Robots-Tag: ' . Ctx::robotsPolicy(App::blog()->settings()->system->robots_policy, ''));
+        $robots_policy = is_string($robots_policy = App::blog()->settings()->system->robots_policy) ? $robots_policy : '';
+
+        header('X-Robots-Tag: ' . Ctx::robotsPolicy($robots_policy, ''));
         App::frontend()->template()->appendPath(My::tplPath());
         self::serveDocument($tpl, $mime);
     }
@@ -64,9 +66,11 @@ class FrontendUrl extends Url
 
         // New temporary Url handler wich void any known URL
         $url_handler = new UrlHandler(App::url()->getMode());
-        $url_handler->registerDefault(static function (): void {});
+        $url_handler->registerDefault(static function (): void {
+        });
         foreach (App::url()->getTypes() as $k => $v) {
-            $url_handler->register($k, $v['url'], $v['representation'], static function (): void {});
+            $url_handler->register($k, $v['url'], $v['representation'], static function (): void {
+            });
         }
 
         // Find type
@@ -78,7 +82,7 @@ class FrontendUrl extends Url
         App::frontend()->template()->appendPath(My::tplPath());
 
         // Load password from configuration
-        $password = $settings->blog_private_pwd;
+        $password = is_string($password = $settings->blog_private_pwd) ? $password : '';
 
         // Define allowed url->type
         $allowed_types = new ArrayObject(['feed', 'xslt', 'tag_feed', 'pubfeed', 'spamfeed', 'hamfeed', 'trackback', 'preview', 'pagespreview', 'contactme', 'xmlrpc']);
@@ -105,8 +109,9 @@ class FrontendUrl extends Url
                 ['expires' => time() - 86_400, 'path' => '/'],
             );
             // Redirection if set or back to password form
-            if ($settings->redirect_url !== '') {
-                Http::redirect($settings->redirect_url);
+            $redirect_url = is_string($redirect_url = $settings->redirect_url) ? $redirect_url : '';
+            if ($redirect_url !== '') {
+                Http::redirect($redirect_url);
             } else {
                 App::frontend()->context()->form_error = __('You are now disconnected.');
                 self::redirectToPasswordForm(false);
@@ -116,7 +121,7 @@ class FrontendUrl extends Url
         // Let's rumble session, cookies & conf :)
         if (App::session()->get('dc_private_blog') == '') {
             // Is any cookie with correct password?
-            $cookiepassvalue = isset($_COOKIE[$cookiepass]) && password_verify((string) $password, (string) $_COOKIE[$cookiepass]);
+            $cookiepassvalue = isset($_COOKIE[$cookiepass]) && is_string($_COOKIE[$cookiepass]) && password_verify($password, $_COOKIE[$cookiepass]);
             if ($cookiepassvalue) {
                 // Restore cookie in session and everything if fine
                 App::session()->set('dc_private_blog', $_COOKIE[$cookiepass]);
@@ -125,16 +130,17 @@ class FrontendUrl extends Url
             }
 
             if (!empty($_POST['private_pass'])) {
-                if (password_verify((string) $_POST['private_pass'], (string) $password)) {
+                $private_pass = is_string($private_pass = $_POST['private_pass']) ? $private_pass : '';
+                if (password_verify($private_pass, $password)) {
                     // The given password is ok, store it in session
-                    App::session()->set('dc_private_blog', App::auth()->crypt((string) $_POST['private_pass']));
+                    App::session()->set('dc_private_blog', App::auth()->crypt($private_pass));
 
                     if (!empty($_POST['pass_remember'])) {
                         // Auto-login is requested, create a cookie with the given password
                         setcookie(
                             $cookiepass,
                             //(string) App::auth()->crypt((string) $_POST['private_pass']),
-                            (string) App::auth()->crypt((string) $password),
+                            (string) App::auth()->crypt($password),
                             ['expires' => time() + 31_536_000, 'path' => '/'],
                         );
                     }
@@ -148,9 +154,12 @@ class FrontendUrl extends Url
 
             // Password given is empty or incorrect, back to the password form
             self::redirectToPasswordForm();
-        } elseif (!password_verify((string) $password, (string) App::session()->get('dc_private_blog'))) {
-            // A session exists but without the correct password, back to the password form
-            self::redirectToPasswordForm();
+        } else {
+            $private_blog = is_string($private_blog = App::session()->get('dc_private_blog')) ? $private_blog : '';
+            if (!password_verify($password, $private_blog)) {
+                // A session exists but without the correct password, back to the password form
+                self::redirectToPasswordForm();
+            }
         }
 
         // Everything is fine

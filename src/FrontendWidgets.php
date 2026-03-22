@@ -18,6 +18,7 @@ namespace Dotclear\Plugin\private;
 use Dotclear\App;
 use Dotclear\Helper\Html\Form\Form;
 use Dotclear\Helper\Html\Form\Hidden;
+use Dotclear\Helper\Html\Form\None;
 use Dotclear\Helper\Html\Form\Note;
 use Dotclear\Helper\Html\Form\Para;
 use Dotclear\Helper\Html\Form\Set;
@@ -38,11 +39,16 @@ class FrontendWidgets
                 return '';
             }
 
+            $text  = is_string($text = $w->get('text')) ? $text : '';
+            $label = is_string($label = $w->get('label')) ? $label : '';
+
             $res = ($w->title ? $w->renderTitle(Html::escapeHTML($w->title)) : '') .
             (new Set())
                 ->items([
-                    (new Note())
-                        ->text((string) $w->get('text')),
+                    $text !== '' ?
+                        (new Note())
+                            ->text($text) :
+                        (new None()),
                     (new Form('form_blogout'))
                         ->method('post')
                         ->action(App::blog()->url())
@@ -51,7 +57,7 @@ class FrontendWidgets
                                 ->class('buttons')
                                 ->items([
                                     (new Hidden('blogout', '1')),
-                                    (new Submit('submit_blogout', Html::escapeHTML((string) $w->get('label'))))
+                                    (new Submit('submit_blogout', Html::escapeHTML($label)))
                                         ->class(['logout', 'submit']),
                                 ]),
                         ]),

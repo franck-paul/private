@@ -41,21 +41,23 @@ class Prepend
         App::behavior()->callBehavior('initFeedsPrivateMode', $feeds_url);
 
         if (App::blog()->isDefined() && $settings->private_flag) {
-            $privatefeed = $settings->blog_private_pwd;
-            // Obfuscate all feeds URL
-            foreach (App::url()->getTypes() as $k => $type) {
-                if (in_array($k, (array) $feeds_url)) {
-                    App::url()->register(
-                        $k,
-                        sprintf('%s/%s', $privatefeed, $type['url']),
-                        sprintf('^%s/%s/(.+)$', $privatefeed, $type['url']),
-                        $type['handler']
-                    );
+            $password = is_string($password = $settings->blog_private_pwd) ? $password : '';
+            if ($password !== '') {
+                // Obfuscate all feeds URL
+                foreach (App::url()->getTypes() as $k => $type) {
+                    if (in_array($k, (array) $feeds_url)) {
+                        App::url()->register(
+                            $k,
+                            sprintf('%s/%s', $password, $type['url']),
+                            sprintf('^%s/%s/(.+)$', $password, $type['url']),
+                            $type['handler']
+                        );
+                    }
                 }
-            }
 
-            App::url()->register('pubfeed', 'feed', '^feed/(.+)$', FrontendUrl::publicFeed(...));
-            App::url()->register('xslt', 'feed/rss2/xslt', '^feed/rss2/xslt$', FrontendUrl::feedXslt(...));
+                App::url()->register('pubfeed', 'feed', '^feed/(.+)$', FrontendUrl::publicFeed(...));
+                App::url()->register('xslt', 'feed/rss2/xslt', '^feed/rss2/xslt$', FrontendUrl::feedXslt(...));
+            }
         }
 
         return true;

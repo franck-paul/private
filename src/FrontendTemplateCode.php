@@ -45,6 +45,8 @@ class FrontendTemplateCode
         array $_params_,
         string $_tag_,
     ): void {
-        echo isset($_SERVER['REQUEST_URI']) ? \Dotclear\Helper\Html\Html::escapeHTML($_SERVER['REQUEST_URI']) : App::blog()->url();
+        $private_request_uri = isset($_SERVER['REQUEST_URI']) && is_string($private_request_uri = $_SERVER['REQUEST_URI']) ? $private_request_uri : '';
+        echo isset($_SERVER['REQUEST_URI']) ? \Dotclear\Helper\Html\Html::escapeHTML($private_request_uri) : App::blog()->url();
+        unset($private_request_uri);
     }
 }
