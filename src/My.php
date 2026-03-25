@@ -30,8 +30,8 @@ class My extends MyPlugin
     public static function tplPath(): string
     {
         $theme  = is_string($theme = App::blog()->settings()->system->theme) ? $theme : '';
-        $tplset = App::themes()->moduleInfo($theme, 'tplset');
-        if (!empty($tplset) && is_dir(implode(DIRECTORY_SEPARATOR, [My::path(), Utility::TPL_ROOT, $tplset]))) {
+        $tplset = is_string($tplset = App::themes()->moduleInfo($theme, 'tplset')) ? $tplset : '';
+        if ($tplset !== '' && is_dir(implode(DIRECTORY_SEPARATOR, [My::path(), Utility::TPL_ROOT, $tplset]))) {
             // a sub-dir exists for my plugin with this tplset
             return implode(DIRECTORY_SEPARATOR, [My::path(), Utility::TPL_ROOT, $tplset]);
         }
