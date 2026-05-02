@@ -103,6 +103,7 @@ class FrontendUrl extends Url
             if (App::session()->exists()) {
                 App::session()->destroy();
             }
+
             setcookie(
                 $cookiepass,
                 'ciao',
