@@ -1,4 +1,4 @@
-/*global $, jsToolBar, dotclear */
+/*global $, dotclear */
 'use strict';
 
 dotclear.ready(() => {
@@ -7,9 +7,9 @@ dotclear.ready(() => {
   dotclear.passwordStrength(opts);
 
   // HTML text editor
-  if (typeof jsToolBar === 'function') {
+  if (typeof dotclear.ToolBar === 'function') {
     $('#private_page_message').each(function () {
-      dotclear.tbWidgetText = new jsToolBar(this);
+      dotclear.tbWidgetText = new dotclear.ToolBar(this);
       dotclear.tbWidgetText.context = 'private';
       dotclear.tbWidgetText.draw('xhtml');
     });
