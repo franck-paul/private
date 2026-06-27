@@ -174,7 +174,7 @@ class Manage
             My::cssLoad('admin.css') .
             My::jsLoad('admin.js');
 
-        $rich_editor = App::auth()->getOption('editor');
+        $rich_editor = App::auth()->prefs()->get('interface')->get('editor');
         $rte_flag    = true;
         $rte_flags   = @App::auth()->prefs()->interface->rte_flags;
         if (is_array($rte_flags) && in_array('private', $rte_flags)) {
