@@ -38,11 +38,11 @@ class Frontend
 
         $settings = My::settings();
 
-        if ($settings->private_flag) {
+        if ($settings->getBool('private_flag')) {
             App::behavior()->addBehavior('publicBeforeDocumentV2', FrontendUrl::privateHandler(...));
         }
 
-        if ($settings->private_conauto_flag) {
+        if ($settings->getBool('private_conauto_flag')) {
             App::behavior()->addBehavior('publicPrivateFormAfterContent', FrontendBehaviors::publicPrivateFormAfterContent(...));
         }
 

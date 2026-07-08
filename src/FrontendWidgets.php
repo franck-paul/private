@@ -30,7 +30,7 @@ class FrontendWidgets
 {
     public static function widgetLogout(WidgetsElement $w): string
     {
-        if (My::settings()->private_flag) {
+        if (My::settings()->getBool('private_flag')) {
             if ($w->offline) {
                 return '';
             }

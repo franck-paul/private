@@ -40,8 +40,8 @@ class Prepend
         $feeds_url = new ArrayObject(['feed', 'tag_feed']);
         App::behavior()->callBehavior('initFeedsPrivateMode', $feeds_url);
 
-        if (App::blog()->isDefined() && $settings->private_flag) {
-            $password = is_string($password = $settings->blog_private_pwd) ? $password : '';
+        if (App::blog()->isDefined() && $settings->getBool('private_flag')) {
+            $password = $settings->getStr('blog_private_pwd', false);
             if ($password !== '') {
                 // Obfuscate all feeds URL
                 foreach (App::url()->getTypes() as $k => $type) {

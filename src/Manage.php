@@ -62,7 +62,10 @@ class Manage
 
         if (!empty($_POST['saveconfig'])) {
             try {
-                if (!empty($_POST['private_flag']) && empty($_POST['blog_private_pwd']) && empty($settings->blog_private_pwd)) {
+                if (!empty($_POST['private_flag'])
+                    && empty($_POST['blog_private_pwd'])
+                    && $settings->getStr('blog_private_pwd', false) === ''
+                ) {
                     App::backend()->notices()->addErrorNotice(__('No password set.'));
                     My::redirect();
                 }
@@ -111,12 +114,12 @@ class Manage
         $settings = My::settings();
 
         // Getting current settings
-        $private_flag         = (bool) $settings->private_flag;
-        $private_conauto_flag = (bool) $settings->private_conauto_flag;
-        $message              = is_string($message = $settings->message) ? $message : '';
+        $private_flag         = $settings->getBool('private_flag', false);
+        $private_conauto_flag = $settings->getBool('private_conauto_flag', false);
+        $message              = $settings->getStr('message', false);
         $feed                 = App::blog()->url() . App::url()->getURLFor('feed', 'atom');
         $comments_feed        = App::blog()->url() . App::url()->getURLFor('feed', 'atom/comments');
-        $redirect_url         = is_string($redirect_url = $settings->redirect_url) ? $redirect_url : '';
+        $redirect_url         = $settings->getStr('redirect_url', false);
         $new_feeds            = (new None());
         $admin_post_behavior  = '';
         $user_lang            = is_string($user_lang = App::auth()->getInfo('user_lang')) ? $user_lang : 'en';
@@ -127,11 +130,11 @@ class Manage
             ->class('private-state')
         ->render();
 
-        if ($settings->blog_private_pwd === null) {
+        if ($settings->getStr('blog_private_pwd', false) === '') {
             App::backend()->notices()->addWarningNotice(__('No password set.'));
         }
 
-        if ($settings->private_flag === true) {
+        if ($settings->getBool('private_flag')) {
             $new_feeds = (new Set())
                 ->items([
                     (new Fieldset())
@@ -176,7 +179,7 @@ class Manage
 
         $rich_editor = App::auth()->prefs()->get('interface')->get('editor');
         $rte_flag    = true;
-        $rte_flags   = @App::auth()->prefs()->interface->rte_flags;
+        $rte_flags   = @App::auth()->prefs()->get('interface')->get('rte_flags');
         if (is_array($rte_flags) && in_array('private', $rte_flags)) {
             $rte_flag = $rte_flags['private'];
         }

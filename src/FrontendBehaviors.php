@@ -23,7 +23,10 @@ class FrontendBehaviors
 {
     public static function publicPrivateFormBeforeContent(): string
     {
-        echo is_string($message = My::settings()->message) ? $message : '';
+        $message = My::settings()->getStr('message', false);
+        if ($message !== '') {
+            echo $message;
+        }
 
         return '';
     }

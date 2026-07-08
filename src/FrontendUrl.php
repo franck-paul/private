@@ -53,7 +53,7 @@ class FrontendUrl extends Url
             $mime = 'application/atom+xml';
         }
 
-        $robots_policy = is_string($robots_policy = App::blog()->settings()->system->robots_policy) ? $robots_policy : '';
+        $robots_policy = App::blog()->settings()->get('system')->getStr('robots_policy', false);
 
         header('X-Robots-Tag: ' . Ctx::robotsPolicy($robots_policy, ''));
         App::frontend()->template()->appendPath(My::tplPath());
@@ -82,7 +82,7 @@ class FrontendUrl extends Url
         App::frontend()->template()->appendPath(My::tplPath());
 
         // Load password from configuration
-        $password = is_string($password = $settings->blog_private_pwd) ? $password : '';
+        $password = $settings->getStr('blog_private_pwd', false);
 
         // Define allowed url->type
         $allowed_types = new ArrayObject(['feed', 'xslt', 'tag_feed', 'pubfeed', 'spamfeed', 'hamfeed', 'trackback', 'preview', 'pagespreview', 'contactme', 'xmlrpc']);
@@ -110,7 +110,7 @@ class FrontendUrl extends Url
                 ['expires' => time() - 86_400, 'path' => '/'],
             );
             // Redirection if set or back to password form
-            $redirect_url = is_string($redirect_url = $settings->redirect_url) ? $redirect_url : '';
+            $redirect_url = $settings->getStr('redirect_url', false);
             if ($redirect_url !== '') {
                 Http::redirect($redirect_url);
             } else {
@@ -122,7 +122,9 @@ class FrontendUrl extends Url
         // Let's rumble session, cookies & conf :)
         if (App::session()->get('dc_private_blog') == '') {
             // Is any cookie with correct password?
-            $cookiepassvalue = isset($_COOKIE[$cookiepass]) && is_string($_COOKIE[$cookiepass]) && password_verify($password, $_COOKIE[$cookiepass]);
+            $cookiepassvalue = isset($_COOKIE[$cookiepass])
+                && is_string($_COOKIE[$cookiepass])
+                && password_verify((string) $password, $_COOKIE[$cookiepass]);
             if ($cookiepassvalue) {
                 // Restore cookie in session and everything if fine
                 App::session()->set('dc_private_blog', $_COOKIE[$cookiepass]);
@@ -132,7 +134,7 @@ class FrontendUrl extends Url
 
             if (!empty($_POST['private_pass'])) {
                 $private_pass = is_string($private_pass = $_POST['private_pass']) ? $private_pass : '';
-                if (password_verify($private_pass, $password)) {
+                if (password_verify($private_pass, (string) $password)) {
                     // The given password is ok, store it in session
                     App::session()->set('dc_private_blog', App::auth()->crypt($private_pass));
 
@@ -157,7 +159,7 @@ class FrontendUrl extends Url
             self::redirectToPasswordForm();
         } else {
             $private_blog = is_string($private_blog = App::session()->get('dc_private_blog')) ? $private_blog : '';
-            if (!password_verify($password, $private_blog)) {
+            if (!password_verify((string) $password, $private_blog)) {
                 // A session exists but without the correct password, back to the password form
                 self::redirectToPasswordForm();
             }
