@@ -65,18 +65,18 @@ class FrontendUrl extends Url
         $settings = My::settings();
 
         // New temporary Url handler wich void any known URL
-        $url_handler = new UrlHandler(App::url()->getMode());
-        $url_handler->registerDefault(static function (): void {
+        $urlHandler = new UrlHandler(App::url()->getMode());
+        $urlHandler->registerDefault(static function (): void {
         });
         foreach (App::url()->getTypes() as $k => $v) {
-            $url_handler->register($k, $v['url'], $v['representation'], static function (): void {
+            $urlHandler->register($k, $v['url'], $v['representation'], static function (): void {
             });
         }
 
         // Find type
-        $url_handler->getDocument();
-        $type = $url_handler->getType();
-        unset($url_handler);
+        $urlHandler->getDocument();
+        $type = $urlHandler->getType();
+        unset($urlHandler);
 
         // Looking for a new template (private.html)
         App::frontend()->template()->appendPath(My::tplPath());
@@ -85,13 +85,13 @@ class FrontendUrl extends Url
         $password = $settings->getStr('blog_private_pwd', false);
 
         // Define allowed url->type
-        $allowed_types = new ArrayObject(['feed', 'xslt', 'tag_feed', 'pubfeed', 'spamfeed', 'hamfeed', 'trackback', 'preview', 'pagespreview', 'contactme', 'xmlrpc']);
-        App::behavior()->callBehavior('initPrivateMode', $allowed_types);
+        $arrayObject = new ArrayObject(['feed', 'xslt', 'tag_feed', 'pubfeed', 'spamfeed', 'hamfeed', 'trackback', 'preview', 'pagespreview', 'contactme', 'xmlrpc']);
+        App::behavior()->callBehavior('initPrivateMode', $arrayObject);
 
         // Generic behavior
         App::behavior()->callBehavior('initPrivateHandler');
 
-        if (in_array($type, (array) $allowed_types)) {
+        if (in_array($type, $arrayObject->getArrayCopy())) {
             return '';
         }
 

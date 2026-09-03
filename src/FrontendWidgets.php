@@ -28,23 +28,23 @@ use Dotclear\Plugin\widgets\WidgetsElement;
 
 class FrontendWidgets
 {
-    public static function widgetLogout(WidgetsElement $w): string
+    public static function widgetLogout(WidgetsElement $widgetsElement): string
     {
         if (My::settings()->getBool('private_flag')) {
-            if ($w->offline) {
+            if ($widgetsElement->offline) {
                 return '';
             }
 
-            if (($w->homeonly == 1 && !App::url()->isHome(App::url()->getType()))
-                || ($w->homeonly == 2 && App::url()->isHome(App::url()->getType()))
+            if (($widgetsElement->homeonly == 1 && !App::url()->isHome(App::url()->getType()))
+                || ($widgetsElement->homeonly == 2 && App::url()->isHome(App::url()->getType()))
             ) {
                 return '';
             }
 
-            $text  = is_string($text = $w->get('text')) ? $text : '';
-            $label = is_string($label = $w->get('label')) ? $label : '';
+            $text  = is_string($text = $widgetsElement->get('text')) ? $text : '';
+            $label = is_string($label = $widgetsElement->get('label')) ? $label : '';
 
-            $res = ($w->title ? $w->renderTitle(Html::escapeHTML($w->title)) : '') .
+            $res = ($widgetsElement->title ? $widgetsElement->renderTitle(Html::escapeHTML($widgetsElement->title)) : '') .
             (new Set())
                 ->items([
                     $text !== '' ?
@@ -66,7 +66,7 @@ class FrontendWidgets
                 ])
             ->render();
 
-            return $w->renderDiv((bool) $w->content_only, 'blogout ' . $w->class, '', $res);
+            return $widgetsElement->renderDiv((bool) $widgetsElement->content_only, 'blogout ' . $widgetsElement->class, '', $res);
         }
 
         return '';

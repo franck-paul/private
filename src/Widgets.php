@@ -19,9 +19,9 @@ use Dotclear\Plugin\widgets\WidgetsStack;
 
 class Widgets
 {
-    public static function initWidgets(WidgetsStack $w): string
+    public static function initWidgets(WidgetsStack $widgetsStack): string
     {
-        $w
+        $widgetsStack
             ->create('privateblog', __('PrivateMode'), FrontendWidgets::widgetLogout(...), null, __('Blog logout'), My::id())
             ->addTitle(__('Blog logout'))
             ->setting('text', __('Text:'), '', 'textarea')

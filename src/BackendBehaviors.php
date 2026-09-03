@@ -20,11 +20,11 @@ use ArrayObject;
 class BackendBehaviors
 {
     /**
-     * @param      ArrayObject<string, mixed>  $rte
+     * @param      ArrayObject<string, mixed>  $arrayObject
      */
-    public static function adminRteFlags(ArrayObject $rte): string
+    public static function adminRteFlags(ArrayObject $arrayObject): string
     {
-        $rte['private'] = [true, __('Private mode message')];
+        $arrayObject['private'] = [true, __('Private mode message')];
 
         return '';
     }

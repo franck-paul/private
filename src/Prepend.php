@@ -37,15 +37,15 @@ class Prepend
         $settings = My::settings();
 
         // Rewrite Feeds with new URL and representation
-        $feeds_url = new ArrayObject(['feed', 'tag_feed']);
-        App::behavior()->callBehavior('initFeedsPrivateMode', $feeds_url);
+        $arrayObject = new ArrayObject(['feed', 'tag_feed']);
+        App::behavior()->callBehavior('initFeedsPrivateMode', $arrayObject);
 
         if (App::blog()->isDefined() && $settings->getBool('private_flag')) {
             $password = $settings->getStr('blog_private_pwd', false);
             if ($password !== '') {
                 // Obfuscate all feeds URL
                 foreach (App::url()->getTypes() as $k => $type) {
-                    if (in_array($k, (array) $feeds_url)) {
+                    if (in_array($k, $arrayObject->getArrayCopy())) {
                         App::url()->register(
                             $k,
                             sprintf('%s/%s', $password, $type['url']),
