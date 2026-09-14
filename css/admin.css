@@ -1,5 +1,5 @@
 .page-title img.private-state {
-  height: 1em;
-  width: auto;
+  block-size: 1em;
+  inline-size: auto;
   vertical-align: top;
 }
