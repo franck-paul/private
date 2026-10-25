@@ -31,20 +31,18 @@ class FrontendWidgets
     public static function widgetLogout(WidgetsElement $widgetsElement): string
     {
         if (My::settings()->getBool('private_flag')) {
-            if ($widgetsElement->offline) {
+            if ($widgetsElement->isOffline()) {
                 return '';
             }
 
-            if (($widgetsElement->homeonly == 1 && !App::url()->isHome(App::url()->getType()))
-                || ($widgetsElement->homeonly == 2 && App::url()->isHome(App::url()->getType()))
-            ) {
+            if (!$widgetsElement->checkHomeOnly(App::url()->getType())) {
                 return '';
             }
 
             $text  = is_string($text = $widgetsElement->get('text')) ? $text : '';
             $label = is_string($label = $widgetsElement->get('label')) ? $label : '';
 
-            $res = ($widgetsElement->title ? $widgetsElement->renderTitle(Html::escapeHTML($widgetsElement->title)) : '') .
+            $res = ($widgetsElement->getTitle() !== '' ? $widgetsElement->renderTitle(Html::escapeHTML($widgetsElement->getTitle())) : '') .
             (new Set())
                 ->items([
                     $text !== '' ?
@@ -66,7 +64,7 @@ class FrontendWidgets
                 ])
             ->render();
 
-            return $widgetsElement->renderDiv((bool) $widgetsElement->content_only, 'blogout ' . $widgetsElement->class, '', $res);
+            return $widgetsElement->renderDiv((bool) $widgetsElement->getContentOnly(), 'blogout ' . $widgetsElement->getClass(), '', $res);
         }
 
         return '';
