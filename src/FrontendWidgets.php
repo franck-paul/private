@@ -64,7 +64,7 @@ class FrontendWidgets
                 ])
             ->render();
 
-            return $widgetsElement->renderDiv((bool) $widgetsElement->getContentOnly(), 'blogout ' . $widgetsElement->getClass(), '', $res);
+            return $widgetsElement->renderDiv($widgetsElement->getContentOnly(), 'blogout ' . $widgetsElement->getClass(), '', $res);
         }
 
         return '';
