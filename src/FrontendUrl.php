@@ -91,7 +91,7 @@ class FrontendUrl extends Url
         // Generic behavior
         App::behavior()->callBehavior('initPrivateHandler');
 
-        if (in_array($type, $arrayObject->getArrayCopy())) {
+        if (in_array($type, $arrayObject->getArrayCopy(), true)) {
             return '';
         }
 

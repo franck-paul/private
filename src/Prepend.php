@@ -45,7 +45,7 @@ class Prepend
             if ($password !== '') {
                 // Obfuscate all feeds URL
                 foreach (App::url()->getTypes() as $k => $type) {
-                    if (in_array($k, $arrayObject->getArrayCopy())) {
+                    if (in_array($k, $arrayObject->getArrayCopy(), true)) {
                         App::url()->register(
                             $k,
                             sprintf('%s/%s', $password, $type['url']),

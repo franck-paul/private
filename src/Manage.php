@@ -180,7 +180,7 @@ class Manage
         $rich_editor = App::auth()->prefs()->get('interface')->get('editor');
         $rte_flag    = true;
         $rte_flags   = @App::auth()->prefs()->get('interface')->get('rte_flags');
-        if (is_array($rte_flags) && in_array('private', $rte_flags)) {
+        if (is_array($rte_flags) && in_array('private', $rte_flags, true)) {
             $rte_flag = $rte_flags['private'];
         }
 
