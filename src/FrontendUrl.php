@@ -46,10 +46,10 @@ class FrontendUrl extends Url
             $type = $m[0];
         }
 
-        $tpl = $type == '' ? 'atom' : $type;
+        $tpl = (string) $type === '' ? 'atom' : $type;
         $tpl .= '-pv.xml';
 
-        if ($type == 'atom') {
+        if ($type === 'atom') {
             $mime = 'application/atom+xml';
         }
 
@@ -120,7 +120,8 @@ class FrontendUrl extends Url
         }
 
         // Let's rumble session, cookies & conf :)
-        if (App::session()->get('dc_private_blog') == '') {
+        $private_blog = is_string($private_blog = App::session()->get('dc_private_blog')) ? $private_blog : '';
+        if ($private_blog === '') {
             // Is any cookie with correct password?
             $cookiepassvalue = isset($_COOKIE[$cookiepass])
                 && is_string($_COOKIE[$cookiepass])
@@ -157,7 +158,6 @@ class FrontendUrl extends Url
             // Password given is empty or incorrect, back to the password form
             self::redirectToPasswordForm();
         } else {
-            $private_blog = is_string($private_blog = App::session()->get('dc_private_blog')) ? $private_blog : '';
             if (!password_verify($password, $private_blog)) {
                 // A session exists but without the correct password, back to the password form
                 self::redirectToPasswordForm();
