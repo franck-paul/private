@@ -41,7 +41,7 @@ class FrontendUrl extends Url
         $type = null;
         $mime = 'application/xml';
 
-        if (preg_match('#^(atom|rss2)$#', (string) $args, $m)) {
+        if ((bool) preg_match('#^(atom|rss2)$#', (string) $args, $m)) {
             # Atom or RSS2 ?
             $type = $m[0];
         }

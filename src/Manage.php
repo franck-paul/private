@@ -134,7 +134,7 @@ class Manage
             App::backend()->notices()->addWarningNotice(__('No password set.'));
         }
 
-        if ($settings->getBool('private_flag')) {
+        if ($settings->getBool('private_flag', false)) {
             $new_feeds = (new Set())
                 ->items([
                     (new Fieldset())
@@ -184,7 +184,7 @@ class Manage
             $rte_flag = $rte_flags['private'];
         }
 
-        if ($rte_flag) {
+        if ((bool) $rte_flag) {
             $editor = is_array($rich_editor) && isset($rich_editor['xhtml']) && is_string($editor = $rich_editor['xhtml']) ? $editor : '';
             $head .= App::behavior()->callBehavior(
                 'adminPostEditor',
