@@ -18,9 +18,9 @@ if (isset($this) && is_object($this) && method_exists($this, 'registerModule') &
         'PrivateMode',
         'Protect your blog with a password',
         'Osku and contributors',
-        '8.0',
+        '9.0',
         [
-            'date'     => '2026-08-03T10:09:02+0200',
+            'date'     => '2026-11-08T10:19:25+0100',
             'requires' => [
                 ['core', '2.40'],
                 ['TemplateHelper'],
